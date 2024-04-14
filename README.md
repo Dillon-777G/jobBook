@@ -5,6 +5,7 @@ create a functional prototype that allows users to create a profile, search for 
 with employers.
 
 **Project Members**:
+
 Dillon Gaughan
 Ravi Dhondkar
 Alexander Lazarov
