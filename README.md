@@ -7,8 +7,11 @@ with employers.
 **Project Members**:
 
 Dillon Gaughan
+
 Ravi Dhondkar
+
 Alexander Lazarov
+
 Malav Padhya
 
 **Conflict Resolution**:
