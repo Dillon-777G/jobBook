@@ -21,3 +21,13 @@ We can resolve conflicts internally by discussing them as a group as needed in o
 **Communication Mechanism**:
 
 We have chosen discord as our communication mechanism as it meets all of our needs. We will have one official meeting a week and stay in consistent.
+
+**Decision Made**:
+
+IDE- VScode, Intellij as a backup ; 
+
+Dependency Management- Maven, Gradle as an alternative ; We already understand maven
+
+Code-so far no dependencies are declared ; we may not use lombok as we like to see template code
+
+Configuration Management- XML 
