@@ -19,4 +19,5 @@ Malav Padhya
 We can resolve conflicts internally by discussing them as a group as needed in our chat or during the meeting. If need be we can contact the professor for guidance.
 
 **Communication Mechanism**:
+
 We have chosen discord as our communication mechanism as it meets all of our needs. We will have one official meeting a week and stay in consistent.
