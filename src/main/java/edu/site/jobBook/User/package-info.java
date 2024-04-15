@@ -9,4 +9,4 @@
  * 
  * @author Pat
  */
-package edu.site.jobBook;
+package edu.site.jobBook.User;
