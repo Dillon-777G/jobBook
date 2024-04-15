@@ -28,6 +28,6 @@ IDE- VScode, Intellij as a backup ;
 
 Dependency Management- Maven, Gradle as an alternative ; We already understand maven
 
-Code-so far no dependencies are declared ; we may not use lombok as we like to see template code
+Code- We are going to use lombok for reducing boiler plate code. We will also be using Junit for unit testing.
 
 Configuration Management- XML 
