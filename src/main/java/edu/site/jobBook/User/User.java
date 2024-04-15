@@ -20,4 +20,13 @@ import lombok.NoArgsConstructor;
 public class User {
     private Profile profile;
     private String userType; // e.g., Candidate, Employer
+
+    /**
+     * Validates the user's password.
+     * @param password The password to validate.
+     * @return true if the password is correct, false otherwise.
+     */
+    public boolean validatePassword(String password) {
+        return this.profile.checkPassword(password);
+    }
 }
