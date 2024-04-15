@@ -7,6 +7,6 @@
  * </ul>
  * Features are utilized to minimize boilerplate code and increase clarity and maintainability.
  * 
- * @author Pat
+ * @author Dillon
  */
 package edu.site.jobBook.User;
