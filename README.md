@@ -24,10 +24,10 @@ We have chosen discord as our communication mechanism as it meets all of our nee
 
 **Decision Made**:
 
-IDE- VScode, Intellij as a backup ; 
+IDE- VScode, Intellij as a backup.
 
-Dependency Management- Maven, Gradle as an alternative ; We already understand maven
+Dependency Management- Maven, Gradle as an alternative; We already understand maven.
 
 Code- We are going to use lombok for reducing boiler plate code. We will also be using Junit for unit testing.
 
-Configuration Management- XML 
+Configuration Management- XML. 
