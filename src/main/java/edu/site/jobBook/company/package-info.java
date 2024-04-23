@@ -5,4 +5,4 @@
  * <li> Its intended to represent a company information and such as name, about, available jobs. 
  * @author Alexander Lazarov
  */
-package edu.site.jobBook.Company;
+package edu.site.jobBook.company;

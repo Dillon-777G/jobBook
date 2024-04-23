@@ -1,4 +1,4 @@
-package edu.site.jobBook.User;
+package edu.site.jobBook.user;
 
 import lombok.Data;
 

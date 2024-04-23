@@ -1,4 +1,4 @@
-package edu.site.jobBook.Company;
+package edu.site.jobBook.company;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

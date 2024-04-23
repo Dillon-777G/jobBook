@@ -9,4 +9,4 @@
  * 
  * @author Dillon
  */
-package edu.site.jobBook.Job;
+package edu.site.jobBook.job;

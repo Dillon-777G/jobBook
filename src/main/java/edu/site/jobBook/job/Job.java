@@ -1,4 +1,4 @@
-package edu.site.jobBook.Job;
+package edu.site.jobBook.job;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
