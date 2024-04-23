@@ -1,5 +1,5 @@
 /**
- * Package to demonstrate the use of Lombok and handle user data for the job registration service.
+ * Package to demonstrate the use of Lombok and handle Job data for the job registration service.
  * <ul>
  * <li>Utilizes @Data for clean and clear POJOs
  * <li>Incorporates @NoArgsConstructor, @AllArgsConstructor for flexible instantiation
@@ -9,4 +9,4 @@
  * 
  * @author Dillon
  */
-package edu.site.jobBook.User;
+package edu.site.jobBook.job;
