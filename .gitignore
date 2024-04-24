@@ -4,6 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Ignore Maven generated files
+/effective-pom.xml
+/target/
+
 ### STS ###
 .apt_generated
 .classpath
