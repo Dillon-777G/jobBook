@@ -1,6 +1,6 @@
-package edu.site.jobBook.Post;
+package edu.site.jobBook.post;
 
-import edu.site.jobBook.User.Profile;
+import edu.site.jobBook.user.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
