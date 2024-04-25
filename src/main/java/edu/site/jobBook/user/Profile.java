@@ -1,12 +1,14 @@
 package edu.site.jobBook.user;
 
 import lombok.Data;
+import jakarta.persistence.Embeddable;
 
 @Data
+@Embeddable
 public class Profile {
     private String firstName;
     private String lastName;
-    private String email; // Assuming we want to include email in the profile
+    private String email; 
     private String username;
-    private String passwordHash;
+ 
 }
