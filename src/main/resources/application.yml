@@ -1,0 +1,22 @@
+app:
+  doc:
+    version: project-alpha
+    title: Job Search Site demo
+    description: This is a test example of given starter code for SE452
+    terms-of-service: http://swagger.io/terms/
+    license: Apache 2.0
+    url: http://springdoc.org
+
+spring:
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:h2:mem:testdb
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    defer-datasource-initialization: true
+  logging:
+    level:
+      root: INFO
+      org.hibernate.SQL: DEBUG

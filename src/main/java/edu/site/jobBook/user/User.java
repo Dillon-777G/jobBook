@@ -1,10 +1,15 @@
 package edu.site.jobBook.user;
 
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 /**
  * Utilizes Lombok to simplify Java code for entity modeling
  * Features demonstrated:
@@ -17,16 +22,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity // This annotation is required to specify the class as a JPA entity
+@Table(name = "USERS")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Embedded
     private Profile profile;
     private String userType; // e.g., Candidate, Employer
 
-    /**
-     * Validates the user's password.
-     * @param password The password to validate.
-     * @return true if the password is correct, false otherwise.
-     */
-    public boolean validatePassword(String password) {
-        return this.profile.checkPassword(password);
-    }
 }
