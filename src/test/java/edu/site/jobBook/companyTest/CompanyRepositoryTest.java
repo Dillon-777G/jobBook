@@ -6,9 +6,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
-
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,15 +18,18 @@ public class CompanyRepositoryTest {
     @Autowired
     private CompanyRepository companyRepository;
 
-
+    @BeforeEach
+    public void resetDatabase() {
+        companyRepository.deleteAll();  // This clears the repository before each test
+    }
 
     @Test
     @Rollback
     public void testAddAndFindCompany() {
         // Create a company
         Company newCompany = new Company();
-        newCompany.setName("Tech Innovators");
-        newCompany.setDescription("Provides innovative tech solutions.");
+        newCompany.setName("Company A");
+        newCompany.setDescription("Company A magic");
 
         // Save the company
         Company savedCompany = companyRepository.save(newCompany);
