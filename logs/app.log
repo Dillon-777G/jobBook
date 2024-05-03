@@ -1,3 +1,0 @@
-2024-04-24 18:48:39,456 INFO o.s.b.StartupInfoLogger [main] Starting JobBookApplicationTests using Java 21.0.3 with PID 93331 (started by _light_ in /home/_light_/School/jobBook)
-2024-04-24 18:48:39,460 INFO o.s.b.SpringApplication [main] No active profile set, falling back to 1 default profile: "default"
-2024-04-24 18:48:41,243 INFO o.s.b.StartupInfoLogger [main] Started JobBookApplicationTests in 1.91 seconds (process running for 2.517)
