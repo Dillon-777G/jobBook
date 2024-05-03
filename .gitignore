@@ -5,7 +5,7 @@ target/
 !**/src/test/**/target/
 
 ### LOG ### 
-/logs/
+logs/
 *.log
 
 # Ignore Maven generated files
