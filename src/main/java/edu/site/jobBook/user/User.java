@@ -17,12 +17,14 @@ import lombok.NoArgsConstructor;
  * @NoArgsConstructor - Generates a no-argument constructor
  * @AllArgsConstructor - Generates a constructor initializing all fields
  * @Builder - Implements the Builder pattern for object creation
+ * @Entity - This annotation is required to specify the class as a JPA entity
+ * @Table - This maps to the specific column needed in the database
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity // This annotation is required to specify the class as a JPA entity
+@Entity 
 @Table(name = "USERS")
 public class User {
     @Id
@@ -31,6 +33,6 @@ public class User {
 
     @Embedded
     private Profile profile;
-    private String userType; // e.g., Candidate, Employer
+    private String userType; 
 
 }
