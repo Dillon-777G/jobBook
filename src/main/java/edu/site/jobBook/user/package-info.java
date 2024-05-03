@@ -19,7 +19,6 @@
  * <ul>
  * <li>@Repository to indicate the class serves as a repository for data access
  * </ul>
- * Features are utilized to minimize boilerplate code and increase clarity and maintainability.
  * 
  * @author Dillon
  */

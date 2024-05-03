@@ -45,7 +45,6 @@ public class UserRepositoryTests {
     }
 
     @Test
-    @Rollback
     public void testFindByProfileLastName() {
         Profile profileSmith = new Profile("John", "Smith", "john.smith@example.com", "johnsmith");
         User userSmith = User.builder().profile(profileSmith).userType("Member").build();
@@ -58,7 +57,6 @@ public class UserRepositoryTests {
     }
 
     @Test
-    @Rollback
     public void testFindByProfileLastNameLike() {
         Profile profileDoe = new Profile("Jane", "Doe", "jane.doe@example.com", "janedoe");
         User userDoe = User.builder().profile(profileDoe).userType("Viewer").build();
@@ -71,7 +69,6 @@ public class UserRepositoryTests {
     }
 
     @Test
-    @Rollback
     public void testFindByProfileEmail() {
         Profile profileEmail = new Profile("Mike", "Ross", "mike.ross@example.com", "mikeross");
         User userEmail = User.builder().profile(profileEmail).userType("Guest").build();
@@ -84,7 +81,6 @@ public class UserRepositoryTests {
     }
 
     @Test
-    @Rollback
     public void testFindByUserType() {
         Profile profileType = new Profile("Sarah", "Connor", "sarah.connor@example.com", "sarahconnor");
         User userType = User.builder().profile(profileType).userType("Admin").build();
