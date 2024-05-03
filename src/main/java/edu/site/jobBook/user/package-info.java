@@ -1,9 +1,23 @@
 /**
- * Package to demonstrate the use of Lombok and handle user data for the job registration service.
+ * Lombok usage
  * <ul>
- * <li>Utilizes @Data for clean and clear POJOs
- * <li>Incorporates @NoArgsConstructor, @AllArgsConstructor for flexible instantiation
- * <li>Employs @Builder to support the Builder pattern
+ * <li>@Data for clean and clear POJOs
+ * <li>@NoArgsConstructor, @AllArgsConstructor for flexible instantiation
+ * <li>@Builder to support the Builder pattern
+ * </ul>
+ * 
+ * Jakarta 
+ * <ul>
+ * <li>@Id to specify the primary key of the entity
+ * <li>@GeneratedValue to define the strategy for generating primary key values
+ * <li>@Embeddable to embed the profile into the user entity
+ * <li>@Table for specifying the table name for persistence
+ * <li>@Entity to mark the class as a persistence entity
+ * </ul>
+ * 
+ * Spring Repository
+ * <ul>
+ * <li>@Repository to indicate the class serves as a repository for data access
  * </ul>
  * Features are utilized to minimize boilerplate code and increase clarity and maintainability.
  * 
