@@ -4,6 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### LOG ### 
+/logs/
+*.log
+
 # Ignore Maven generated files
 /effective-pom.xml
 /target/
