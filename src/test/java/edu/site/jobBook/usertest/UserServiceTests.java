@@ -54,17 +54,17 @@ public class UserServiceTests {
         assertThat(foundUsers).containsExactly(user);
     }
 
-    // @Test
-    // @Rollback
-    // public void testFindByPartialLastName() {
-    //     Profile profile = new Profile("Jane", "Doe", "jane.doe@example.com", "janedoe");
-    //     User user = User.builder().profile(profile).userType("Viewer").build();
-    //     userRepository.save(user);
+    @Test
+    @Rollback
+    public void testFindByPartialLastName() {
+        Profile profile = new Profile("Jane", "Doe", "jane.doe@example.com", "janedoe");
+        User user = User.builder().profile(profile).userType("Viewer").build();
+        userRepository.save(user);
 
-    //     List<User> foundUsers = userService.findByPartialLastName("Do");
-
-    //     assertThat(foundUsers).containsExactly(user);
-    // }
+        List<User> foundUsers = userService.findByPartialLastName("%Do%");
+        assertThat(foundUsers).hasSize(1);
+        assertThat(foundUsers.get(0).getProfile().getLastName()).isEqualTo("Doe");
+    }
 
     @Test
     @Rollback
