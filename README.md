@@ -29,7 +29,7 @@ We have chosen discord as our communication mechanism as it meets all of our nee
 | **IDE**               | VSCode       | IntelliJ     |
 | **Dependency Management** | Maven    | Gradle       |
 | **Code**              | Lombok for reducing boilerplate code; JUnit for unit testing |
-| **Configuration Management** | XML |
+| **Configuration Management** | XML, application.properties |
 | **Doucmentation**     | OpenAPI, Swagger | Javadocs |
 
 ## How to Use This Project
