@@ -30,6 +30,7 @@ We have chosen discord as our communication mechanism as it meets all of our nee
 | **Dependency Management** | Maven    | Gradle       |
 | **Code**              | Lombok for reducing boilerplate code; JUnit for unit testing |
 | **Configuration Management** | XML |
+| **Doucmentation**     | OpenAPI, Swagger | Javadocs |
 
 ## How to Use This Project
 
