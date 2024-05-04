@@ -40,3 +40,9 @@ We have chosen discord as our communication mechanism as it meets all of our nee
 1. Clone the repository:
    ```bash
    git clone https://github.com/yourgithubusername/jobsearchapp.git
+2. Navigate to the project directory
+   ```bash
+   cd jobBook
+3.Run the application
+   ```bash
+   mvn spring-boot:run
