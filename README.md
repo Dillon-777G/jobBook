@@ -4,15 +4,12 @@ We have decided to create a Job Search web application similar to linked in. Our
 create a functional prototype that allows users to create a profile, search for jobs, and interact
 with employers.
 
-**Project Members**:
-
-Dillon Gaughan
-
-Ravi Dhondkar
-
-Alexander Lazarov
-
-Malav Padhya
+| Project Members  |
+|------------------|
+| Dillon Gaughan   |
+| Ravi Dhondkar    |
+| Alexander Lazarov|
+| Malav Padhya     |
 
 **Conflict Resolution**:
 
