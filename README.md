@@ -1,15 +1,16 @@
-**Purpose**:
-
-We have decided to create a Job Search web application similar to linked in. Our goal is to
-create a functional prototype that allows users to create a profile, search for jobs, and interact
-with employers.
-
 | Project Members  |
 |------------------|
 | Dillon Gaughan   |
 | Ravi Dhondkar    |
 | Alexander Lazarov|
 | Malav Padhya     |
+
+
+**Purpose**:
+
+We have decided to create a Job Search web application similar to linked in. Our goal is to
+create a functional prototype that allows users to create a profile, search for jobs, and interact
+with employers.
 
 **Conflict Resolution**:
 
