@@ -33,4 +33,12 @@ public class UserService {
     public List<User> findByUserType(String userType) {
         return userRepository.findByUserType(userType);
     }
+
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    public void deleteAll() {
+        userRepository.deleteAll();
+    }
 }
