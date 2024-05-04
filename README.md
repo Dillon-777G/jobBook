@@ -1,11 +1,11 @@
 # jobBook Application
 
-| Project Members  |
-|------------------|
-| Dillon Gaughan   |
-| Ravi Dhondkar    |
-| Alexander Lazarov|
-| Malav Padhya     |
+| Project Members  | Area  |
+|------------------|-------|
+| Dillon Gaughan   | User  |
+| Ravi Dhondkar    | Job   |
+| Alexander Lazarov| Company |
+| Malav Padhya     | Post  |
 
 
 ## **Purpose**:
