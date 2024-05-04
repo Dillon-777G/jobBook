@@ -30,3 +30,16 @@ We have chosen discord as our communication mechanism as it meets all of our nee
 | **Dependency Management** | Maven    | Gradle       |
 | **Code**              | Lombok for reducing boilerplate code; JUnit for unit testing |
 | **Configuration Management** | XML |
+
+## How to Use This Project
+
+### Prerequisites
+
+- Java 21
+- Maven (for dependency management)
+
+### Setup and Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourgithubusername/jobsearchapp.git
