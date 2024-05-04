@@ -48,6 +48,9 @@ We have chosen discord as our communication mechanism as it meets all of our nee
 2. Navigate to the project directory
    ```bash
    cd jobBook
-3. Run the application
+3. Build the application   
+   ```bash
+   mvn package
+4. Run the application
    ```bash
    mvn spring-boot:run
