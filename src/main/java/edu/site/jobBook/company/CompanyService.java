@@ -3,6 +3,7 @@ package edu.site.jobBook.company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,10 @@ public class CompanyService {
 
     public void deleteCompany(Long id) {
         companyRepository.deleteById(id);
+    }
+
+    public List<Company> findCompaniesByPartialName(String partialName) {
+        return companyRepository.findByNameContainingIgnoreCase(partialName);
     }
 
     /* future references.

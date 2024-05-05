@@ -1,5 +1,6 @@
 package edu.site.jobBook.post;
 
+import edu.site.jobBook.company.Company;
 import edu.site.jobBook.post.comment.PostComment;
 import edu.site.jobBook.user.User;
 import jakarta.persistence.*;
@@ -30,5 +31,10 @@ public class Post {
     private Long shares;
     @OneToMany(mappedBy="post")
     private List<PostComment> comments;
+
+    //Testing for handling company posts
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 }
 
