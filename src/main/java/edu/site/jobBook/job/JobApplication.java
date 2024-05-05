@@ -1,18 +1,37 @@
 package edu.site.jobBook.job;
 
+
+import edu.site.jobBook.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import jakarta.persistence.*;
 import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "JOB_APPLICATIONS")
 public class JobApplication {
+@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Job job;  
-    private Long applicantId;  
+
+    @ManyToOne
+    @JoinColumn(name = "job_id", nullable = false)
+    private Job job;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "application_date", nullable = false)
     private Date applicationDate;
-    private String status;  
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private JobApplicationStatus status;
 }
