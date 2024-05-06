@@ -3,6 +3,7 @@ package edu.site.jobBook.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -55,4 +56,5 @@ public class UserController {
         List<User> users = userService.findByUserType(userType);
         return ResponseEntity.ok(users);
     }
+
 }
