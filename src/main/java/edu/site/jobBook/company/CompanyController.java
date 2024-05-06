@@ -63,5 +63,19 @@ public class CompanyController {
         return ResponseEntity.ok(companies);
     }
 
+    @GetMapping
+    @Operation(summary = "Find all companies", description = "Returns a list of all companies")
+    public ResponseEntity<List<Company>> getAllCompanies() {
+        List<Company> companies = companyService.findAllCompanies();
+        return ResponseEntity.ok(companies);
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Update a company", description = "Updates the company with the specified ID")
+    public ResponseEntity<Company> updateCompany(@PathVariable Long id, @RequestBody Company company) {
+        Company updatedCompany = companyService.updateCompany(id, company);
+        return ResponseEntity.ok(updatedCompany);
+    }
+
     
 }

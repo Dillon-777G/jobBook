@@ -39,6 +39,19 @@ public class CompanyService {
         return companyRepository.findByNameContainingIgnoreCase(partialName);
     }
 
+    public Company updateCompany(Long id, Company updatedCompany) {
+        return companyRepository.findById(id)
+                .map(company -> {
+                    company.setName(updatedCompany.getName());
+                    company.setDescription(updatedCompany.getDescription());
+                    return companyRepository.save(company);
+                })
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+    }
+
+    public List<Company> findAllCompanies() {
+        return (List<Company>) companyRepository.findAll();
+    }
     
     /* future references.
     * https://www.w3docs.com/snippets/java/how-do-i-update-an-entity-using-spring-data-jpa.html
