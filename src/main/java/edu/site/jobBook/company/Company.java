@@ -29,14 +29,14 @@ public class Company {
 
     @Column(name = "description", length = 255)
     private String description;
+
+    // @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // private List<Post> posts = new ArrayList<>();
+
     //waiting on other classes to be more developed
-    @Builder.Default
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Job> jobs = new ArrayList<>();
-    
-    @Builder.Default
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Post> posts = new ArrayList<>();
+    // @Builder.Default
+    // @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // private List<Job> jobs = new ArrayList<>();
 
     //https://stackoverflow.com/questions/71873676/java-override-equals-when-this-getclass-o-getclass-fails-but-shouldn
     @Override

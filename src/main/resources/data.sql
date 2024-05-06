@@ -9,3 +9,4 @@ insert into companies(id, name, description) values (1,'SE352', 'Test 352');
 --Insert into post representing a company
 INSERT INTO POST (id, company_id, caption) VALUES (RANDOM_UUID(), 10, 'SE452 post test');
 INSERT INTO POST (id, company_id, caption) VALUES (RANDOM_UUID(), 1, 'SE352 post test');
+
