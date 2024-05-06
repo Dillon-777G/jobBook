@@ -1,33 +1,56 @@
-**Purpose**:
+# jobBook Application
+
+| Project Members  | Area  |
+|------------------|-------|
+| Dillon Gaughan   | User  |
+| Ravi Dhondkar    | Job   |
+| Alexander Lazarov| Company |
+| Malav Padhya     | Post  |
+
+
+## **Purpose**:
 
 We have decided to create a Job Search web application similar to linked in. Our goal is to
 create a functional prototype that allows users to create a profile, search for jobs, and interact
 with employers.
 
-**Project Members**:
-
-Dillon Gaughan
-
-Ravi Dhondkar
-
-Alexander Lazarov
-
-Malav Padhya
-
-**Conflict Resolution**:
+## **Conflict Resolution**:
 
 We can resolve conflicts internally by discussing them as a group as needed in our chat or during the meeting. If need be we can contact the professor for guidance.
 
-**Communication Mechanism**:
+## **Communication Mechanism**:
 
 We have chosen discord as our communication mechanism as it meets all of our needs. We will have one official meeting a week and stay in consistent.
 
-**Decision Made**:
+## **Decision Made**:
 
-IDE- VScode, Intellij as a backup.
+| Category              | Choice       | Alternative  |
+|-----------------------|--------------|--------------|
+| **IDE**               | VSCode       | IntelliJ     |
+| **Dependency Management** | Maven    | Gradle       |
+| **Code**              | Lombok for reducing boilerplate code; JUnit for unit testing |
+| **Configuration Management** | XML, application.properties |
+| **Doucmentation**     | OpenAPI, Swagger | Javadocs |
+| **Database**          | h2           | mariadb      |
 
-Dependency Management- Maven, Gradle as an alternative; We already understand maven.
+## How to Use This Project
 
-Code- We are going to use lombok for reducing boiler plate code. We will also be using Junit for unit testing.
+### Prerequisites
 
-Configuration Management- XML. 
+- Java 21
+- Maven (for dependency management)
+
+### Setup and Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourgithubusername/jobsearchapp.git
+2. Navigate to the project directory
+   ```bash
+   cd jobBook
+3. Build the application   
+   ```bash
+   mvn package
+4. Run the application
+   ```bash
+   mvn spring-boot:run
