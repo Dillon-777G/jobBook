@@ -1,7 +1,11 @@
 package edu.site.jobBook.company;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import edu.site.jobBook.post.Post;
+import edu.site.jobBook.post.PostRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +15,9 @@ public class CompanyService {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private PostRepository postRepository;
 
     public Company addCompany(Company company) {
         return companyRepository.save(company);
@@ -30,6 +37,14 @@ public class CompanyService {
 
     public List<Company> findCompaniesByPartialName(String partialName) {
         return companyRepository.findByNameContainingIgnoreCase(partialName);
+    }
+
+    public Post createPost(Long companyId, Post post) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+        post.setCompany(company);
+        post.setUser(null);  
+        return postRepository.save(post);
     }
 
     /* future references.

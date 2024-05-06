@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import edu.site.jobBook.post.Post;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -60,5 +61,12 @@ public class CompanyController {
     public ResponseEntity<List<Company>> getCompaniesByPartialName(@PathVariable String partialName) {
         List<Company> companies = companyService.findCompaniesByPartialName(partialName);
         return ResponseEntity.ok(companies);
+    }
+
+    @PostMapping("/{id}/posts")
+    @Operation(summary = "Create a post for a company", description = "Creates a post for the specified company")
+    public ResponseEntity<Post> createPostForCompany(@PathVariable Long id, @RequestBody Post post) {
+        Post createdPost = companyService.createPost(id, post);
+        return ResponseEntity.ok(createdPost);
     }
 }
