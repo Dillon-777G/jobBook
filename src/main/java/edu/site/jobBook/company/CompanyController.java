@@ -63,10 +63,5 @@ public class CompanyController {
         return ResponseEntity.ok(companies);
     }
 
-    @PostMapping("/{id}/posts")
-    @Operation(summary = "Create a post for a company", description = "Creates a post for the specified company")
-    public ResponseEntity<Post> createPostForCompany(@PathVariable Long id, @RequestBody Post post) {
-        Post createdPost = companyService.createPost(id, post);
-        return ResponseEntity.ok(createdPost);
-    }
+    
 }

@@ -39,14 +39,7 @@ public class CompanyService {
         return companyRepository.findByNameContainingIgnoreCase(partialName);
     }
 
-    public Post createPost(Long companyId, Post post) {
-        Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new RuntimeException("Company not found"));
-        post.setCompany(company);
-        post.setUser(null);  
-        return postRepository.save(post);
-    }
-
+    
     /* future references.
     * https://www.w3docs.com/snippets/java/how-do-i-update-an-entity-using-spring-data-jpa.html
     * https://medium.com/@bubu.tripathy/implementing-transactions-in-a-spring-boot-application-bc6b33e88557

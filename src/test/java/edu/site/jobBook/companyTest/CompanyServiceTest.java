@@ -34,32 +34,32 @@ public class CompanyServiceTest {
         companyRepository.deleteAll();  // This clears the repository before each test
     }
 
-    @Test
-    @Rollback
-    public void testCreatePostForCompany() {
-        // Create a company
-        Company newCompany = new Company();
-        newCompany.setName("Company A");
-        newCompany.setDescription("Company A magic");
-        Company savedCompany = companyRepository.save(newCompany);
+    // @Test
+    // @Rollback
+    // public void testCreatePostForCompany() {
+    //     // Create a company
+    //     Company newCompany = new Company();
+    //     newCompany.setName("Company A");
+    //     newCompany.setDescription("Company A magic");
+    //     Company savedCompany = companyRepository.save(newCompany);
 
-        // Create a post for the company
-        Post newPost = new Post();
-        newPost.setCaption("Company A's first post");
+    //     // Create a post for the company
+    //     Post newPost = new Post();
+    //     newPost.setCaption("Company A's first post");
 
-        Post savedPost = companyService.createPost(savedCompany.getId(), newPost);
-        assertNotNull(savedPost.getId());
-        assertEquals(savedCompany, savedPost.getCompany());
+    //     Post savedPost = companyService.createPost(savedCompany.getId(), newPost);
+    //     assertNotNull(savedPost.getId());
+    //     assertEquals(savedCompany, savedPost.getCompany());
 
-        // Verify the post was saved correctly
-        Optional<Post> foundPost = postRepository.findById(savedPost.getId());
-        assertTrue(foundPost.isPresent());
-        assertEquals("Company A's first post", foundPost.get().getCaption());
-        assertEquals(savedCompany.getId(), foundPost.get().getCompany().getId());
+    //     // Verify the post was saved correctly
+    //     Optional<Post> foundPost = postRepository.findById(savedPost.getId());
+    //     assertTrue(foundPost.isPresent());
+    //     assertEquals("Company A's first post", foundPost.get().getCaption());
+    //     assertEquals(savedCompany.getId(), foundPost.get().getCompany().getId());
 
-        // Verify the company's jobs and posts lists
-        assertTrue(savedCompany.getJobs().isEmpty(), "Jobs list should be empty");
-        assertTrue(savedCompany.getPosts().isEmpty(), "Posts list should be empty");
-    }
+    //     // Verify the company's jobs and posts lists
+    //     assertTrue(savedCompany.getJobs().isEmpty(), "Jobs list should be empty");
+    //     assertTrue(savedCompany.getPosts().isEmpty(), "Posts list should be empty");
+    // }
 
 }
