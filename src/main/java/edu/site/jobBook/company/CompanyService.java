@@ -4,7 +4,6 @@ package edu.site.jobBook.company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.site.jobBook.post.Post;
 import edu.site.jobBook.post.PostRepository;
 
 import java.util.List;
