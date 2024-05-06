@@ -1,5 +1,6 @@
 package edu.site.jobBook.post;
 
+import edu.site.jobBook.company.Company;
 import edu.site.jobBook.post.comment.PostComment;
 import edu.site.jobBook.user.User;
 import jakarta.persistence.*;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Table(name = "POST")
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -30,5 +31,10 @@ public class Post {
     private Long shares;
     @OneToMany(mappedBy="post")
     private List<PostComment> comments;
+
+    //Testing for handling company posts
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 }
 
