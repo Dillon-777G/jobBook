@@ -10,7 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -21,14 +20,14 @@ import java.util.UUID;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
-    @OneToOne(cascade = CascadeType.ALL)
+    private long id;
+    @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     private String caption;
     private byte[] image;
-    private Long likes;
-    private Long shares;
+    private long likes;
+    private long shares ;
     @OneToMany(mappedBy="post")
     private List<PostComment> comments;
 

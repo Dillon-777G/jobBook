@@ -1,5 +1,6 @@
 package edu.site.jobBook.post.comment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.site.jobBook.post.Post;
 import edu.site.jobBook.user.User;
 import jakarta.persistence.*;
@@ -20,13 +21,15 @@ import java.util.UUID;
 public class PostComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
+    private long id;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
     private Instant time;
     private String message;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User sourceUser;
 }
