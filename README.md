@@ -8,6 +8,9 @@
 | Malav Padhya     | Post  |
 
 
+![Compile Image](images/cleancompile.png)
+
+
 ## **Purpose**:
 
 We have decided to create a Job Search web application similar to linked in. Our goal is to
