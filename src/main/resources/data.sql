@@ -7,5 +7,5 @@ insert into companies(id, name, description) values (10, 'SE452', 'Test 452');
 insert into companies(id, name, description) values (1,'SE352', 'Test 352');   
 
 --Insert into post representing a company
-INSERT INTO POST (id, company_id, caption) VALUES (RANDOM_UUID(), 10, 'SE452 post test');
-INSERT INTO POST (id, company_id, caption) VALUES (RANDOM_UUID(), 1, 'SE352 post test');
+INSERT INTO POST (id, company_id, caption, likes, shares) VALUES (1, 10, 'SE452 post test',0,0);
+INSERT INTO POST (id, company_id, caption, likes, shares) VALUES (2, 1, 'SE352 post test',0,0);
