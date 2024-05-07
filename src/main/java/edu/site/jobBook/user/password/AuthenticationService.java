@@ -1,9 +1,7 @@
-package edu.site.jobBook.user;
+package edu.site.jobBook.user.password;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import edu.site.jobBook.user.password.PasswordRepository;
-import edu.site.jobBook.user.password.Password;
 
 @Service
 public class AuthenticationService {

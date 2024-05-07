@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import edu.site.jobBook.user.password.PasswordRepository;
+import edu.site.jobBook.user.password.*;
 import edu.site.jobBook.user.*;
 
 import static org.junit.jupiter.api.Assertions.*;
