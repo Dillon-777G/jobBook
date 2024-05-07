@@ -2,6 +2,8 @@ package edu.site.jobBook.companyTest;
 
 import edu.site.jobBook.company.Company;
 import edu.site.jobBook.company.CompanyRepository;
+import edu.site.jobBook.post.PostRepository;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,9 +20,14 @@ public class CompanyRepositoryTest {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Autowired
+    private PostRepository postRepository;
+
     @BeforeEach
     public void resetDatabase() {
-        companyRepository.deleteAll();  // This clears the repository before each test
+        postRepository.deleteAll();
+        // Delete all companies
+        companyRepository.deleteAll(); 
     }
 
     @Test
