@@ -31,7 +31,7 @@ We have chosen discord as our communication mechanism as it meets all of our nee
 | **Code**              | Lombok for reducing boilerplate code; JUnit for unit testing |
 | **Configuration Management** | XML, application.properties |
 | **Doucmentation**     | OpenAPI, Swagger | Javadocs |
-| **Database**          | h2 - 4/24/24           | mariadb      |
+| **Database**          | h2 - chosen on 4/24/24           | mariadb      |
 
 
 ## **Lessons Learned**:
