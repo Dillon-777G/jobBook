@@ -24,14 +24,14 @@ We have chosen discord as our communication mechanism as it meets all of our nee
 
 ## **Decision Made**:
 
-| Category              | Choice       | Alternative  |
-|-----------------------|--------------|--------------|
-| **IDE**               | VSCode       | IntelliJ     |
-| **Dependency Management** | Maven    | Gradle       |
-| **Code**              | Lombok for reducing boilerplate code; JUnit for unit testing |
-| **Configuration Management** | XML, application.properties |
-| **Doucmentation**     | OpenAPI, Swagger | Javadocs |
-| **Database**          | h2 - chosen on 4/24/24           | mariadb      |
+| Category              | Choice       | Alternative  |  Decision Date |
+|-----------------------|--------------|--------------|----------------|
+| **IDE**               | VSCode       | IntelliJ     |  04/13/24      |
+| **Dependency Management** | Maven    | Gradle       |  04/13/24      |
+| **Code**              | Lombok for reducing boilerplate code; JUnit for unit testing |  04/13/24  |
+| **Configuration Management** |  application.properties | 04/13/24    |
+| **Doucmentation**     | OpenAPI, Swagger | Javadocs |   05/03/24     |
+| **Database**          | h2           | mariadb      |   04/24/24     |
 
 
 ## **Lessons Learned**:
