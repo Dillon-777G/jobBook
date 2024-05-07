@@ -37,7 +37,7 @@ We have chosen discord as our communication mechanism as it meets all of our nee
 ## **Lessons Learned**:
 
 Currently our project uses the H2 database, which we have found much easier to use than our original plan of using mariadb. 
-This change allowed us to speed up our development marginally, gaining insight into how using APIs with less of a learning can be beneficial under deadlines.
+This change allowed us to speed up our development marginally, gaining insight into how using APIs with a lower learning curve can be beneficial under deadlines.
 
 
 ## How to Use This Project
