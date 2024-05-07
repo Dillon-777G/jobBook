@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 
 @SpringBootTest
@@ -29,14 +28,14 @@ public class UserControllerTests {
 
     @BeforeEach
     public void setup(){
-        userService.deleteAll(); // Clear the database before each test
+        userService.deleteAll(); 
     }
     
     @Test
     public void testGetUsersByFirstName() throws Exception {
         Profile profile = new Profile("John", "Doe", "john.doe@example.com", "johndoe");
         User user = User.builder().profile(profile).userType("Admin").build();
-        userService.save(user); // Save the user to the database
+        userService.save(user); 
 
         mockMvc.perform(get("/api/users/by-first-name/John")
                 .contentType(MediaType.APPLICATION_JSON))
