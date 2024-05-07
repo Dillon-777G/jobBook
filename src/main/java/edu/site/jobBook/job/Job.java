@@ -1,5 +1,7 @@
 package edu.site.jobBook.job;
 
+import java.util.UUID;
+
 import edu.site.jobBook.company.Company;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(name = "title", nullable = false, length = 100)
     private String title;
