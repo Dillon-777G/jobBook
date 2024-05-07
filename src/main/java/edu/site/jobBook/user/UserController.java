@@ -55,4 +55,5 @@ public class UserController {
         List<User> users = userService.findByUserType(userType);
         return ResponseEntity.ok(users);
     }
+
 }
