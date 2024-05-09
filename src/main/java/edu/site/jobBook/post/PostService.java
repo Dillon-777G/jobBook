@@ -3,36 +3,45 @@ package edu.site.jobBook.post;
 import edu.site.jobBook.post.comment.PostComment;
 import edu.site.jobBook.post.dto.PostDTO;
 import edu.site.jobBook.user.User;
+import edu.site.jobBook.user.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 @Service
 public class PostService {
 
     private final PostRepository postRepository;
 
-    public PostService(PostRepository postRepository) {
+    private final UserRepository userRepository;
+
+    public PostService(PostRepository postRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Post> fetchAllUsersPost(User user) {
         return postRepository.findByUser(user);
     }
 
-    public Post fetchPostById(UUID id) {
+    public Post fetchPostById(long id) {
         return postRepository.findById(id).orElse(null);
     }
 
     public Post createPost(PostDTO postDTO, User user) {
+        var oUser = userRepository.findById(user.getId());
+        if(oUser.isEmpty()) {
+            throw new IllegalArgumentException("User not found");
+        }
         Post post = Post.builder()
                 .caption(postDTO.getCaption())
                 .image(postDTO.getImage())
-                .user(user)
+                .user(oUser.get())
                 .build();
-        return postRepository.save(post);
+        post = postRepository.save(post);
+        return post;
     }
 
     public void addCommentToPost(PostComment comment) {
@@ -54,7 +63,7 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public void deletePostById(UUID id) {
+    public void deletePostById(long id) {
         postRepository.deleteById(id);
     }
 }
