@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/jobs")
 public class JobController {
+
     private final JobService jobService;
 
     @Autowired
@@ -29,6 +30,7 @@ public class JobController {
     }
 
     @GetMapping("/{id}")
+    @ResponseBody
     public ResponseEntity<Job> getJobById(@PathVariable Long id) {
         Job job = jobService.getJobById(id);
         if (job != null) {
@@ -48,8 +50,7 @@ public class JobController {
     public ResponseEntity<Job> updateJob(@PathVariable Long id, @RequestBody Job job) {
         Job existingJob = jobService.getJobById(id);
         if (existingJob != null) {
-            job.setId(id);
-            Job updatedJob = jobService.saveJob(job);
+            Job updatedJob = jobService.updateJob(job);
             return ResponseEntity.ok(updatedJob);
         } else {
             return ResponseEntity.notFound().build();

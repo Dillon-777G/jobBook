@@ -8,6 +8,7 @@ import edu.site.jobBook.company.Company;
 
 @Service
 public class JobService {
+
     private  final JobRepository jobRepository;
 
     @Autowired
@@ -42,4 +43,6 @@ public class JobService {
     public List<Job> getJobsByCompany(Company company) {
         return jobRepository.findByCompany(company);
     }
+
+    
 }
