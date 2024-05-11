@@ -11,11 +11,11 @@ INSERT INTO POST (id, company_id, caption, likes, shares) VALUES (1, 10, 'SE452 
 INSERT INTO POST (id, company_id, caption, likes, shares) VALUES (2, 1, 'SE352 post test',0,0);
 
 -- Insert into JOBS table
-INSERT INTO JOBS (id,title, company_id)
+INSERT INTO JOBS (title, company_id)
 VALUES
-    (1,'Software Engineer', 1),
-    (2,'Data Analyst', 10),
-    (3,'Marketing Manager', 1);
+    ('Software Engineer', 1),
+    ('Data Analyst', 10),
+    ('Marketing Manager', 1);
 
 -- Insert into JOB_DESCRIPTION table
 INSERT INTO JOB_DESCRIPTION (job_id, overview, responsibilities, skills, qualification, benefits)
