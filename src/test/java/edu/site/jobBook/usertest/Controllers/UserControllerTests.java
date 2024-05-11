@@ -1,4 +1,4 @@
-package edu.site.jobBook.usertest;
+package edu.site.jobBook.usertest.Controllers;
 
 import edu.site.jobBook.user.User;
 import edu.site.jobBook.user.Profile;
