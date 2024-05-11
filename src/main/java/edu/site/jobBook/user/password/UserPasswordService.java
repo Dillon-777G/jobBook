@@ -1,13 +1,9 @@
-package edu.site.jobBook.user;
+package edu.site.jobBook.user.password;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-
-// import edu.site.jobBook.user.User;
-// import edu.site.jobBook.user.UserRepository;
-import edu.site.jobBook.user.password.Password;
-import edu.site.jobBook.user.password.PasswordRepository;
+import edu.site.jobBook.user.*;
 
 @Service
 @Transactional

@@ -1,5 +1,7 @@
 package edu.site.jobBook.user;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import edu.site.jobBook.user.password.Password;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,7 @@ public class User {
     private long id;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @JsonManagedReference
     private Password password;
     
     @Embedded

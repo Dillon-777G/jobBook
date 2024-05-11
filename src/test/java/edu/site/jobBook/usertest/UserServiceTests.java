@@ -100,16 +100,13 @@ public class UserServiceTests {
     @Test
     @Rollback
     public void testFindByProfileUsername(){
-        // Arrange
         Profile profile = new Profile("Ella", "Fitzgerald", "ella.fitzgerald@example.com", "ellaFitz");
         User user = User.builder().profile(profile).userType("Subscriber").build();
         userRepository.save(user);
 
-    // Act
         Optional<User> foundUser = userRepository.findByProfileUsername("ellaFitz");
 
-    // Assert
         assertThat(foundUser).isPresent();
-        assertThat(foundUser.get()).isEqualToComparingFieldByField(user);
+        assertThat(foundUser.get()).usingRecursiveComparison().isEqualTo(user);
     }
 }
