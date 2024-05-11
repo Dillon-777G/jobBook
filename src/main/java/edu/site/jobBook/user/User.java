@@ -26,4 +26,11 @@ public class User {
     private Profile profile;
     private String userType; 
 
+    public void createPassword(String rawPassword) {
+        if (this.password == null) {
+            this.password = new Password();
+            this.password.setUser(this);
+        }
+        this.password.setPassword(rawPassword);
+    }
 }

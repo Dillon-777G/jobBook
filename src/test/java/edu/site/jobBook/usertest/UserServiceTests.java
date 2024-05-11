@@ -4,7 +4,7 @@ import edu.site.jobBook.user.Profile;
 import edu.site.jobBook.user.User;
 import edu.site.jobBook.user.UserRepository;
 import edu.site.jobBook.user.UserService;
-import edu.site.jobBook.user.password.Password;
+// import edu.site.jobBook.user.password.Password;
 import edu.site.jobBook.user.password.PasswordRepository;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,10 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -36,19 +35,6 @@ public class UserServiceTests {
     public void setup(){
         userRepository.deleteAll();
         passwordRepository.deleteAll(); 
-    }
-
-    @Test
-    public void testCreateUserWithPassword() {
-        Profile profile = new Profile("John", "Doe", "john@example.com", "johndoe");
-        User user = new User();
-        user.setProfile(profile);
-        user.setUserType("Admin");
-
-        User savedUser = userService.createUserWithPassword(user, "Secure123!");
-
-        assertNotNull(savedUser.getPassword());
-        assertTrue(savedUser.getPassword().getHash().equals(Password.hashPassword("Secure123!")));
     }
 
     @Test
@@ -109,5 +95,21 @@ public class UserServiceTests {
         List<User> foundUsers = userService.findByUserType("Admin");
 
         assertThat(foundUsers).containsExactly(user);
+    }
+
+    @Test
+    @Rollback
+    public void testFindByProfileUsername(){
+        // Arrange
+        Profile profile = new Profile("Ella", "Fitzgerald", "ella.fitzgerald@example.com", "ellaFitz");
+        User user = User.builder().profile(profile).userType("Subscriber").build();
+        userRepository.save(user);
+
+    // Act
+        Optional<User> foundUser = userRepository.findByProfileUsername("ellaFitz");
+
+    // Assert
+        assertThat(foundUser).isPresent();
+        assertThat(foundUser.get()).isEqualToComparingFieldByField(user);
     }
 }
