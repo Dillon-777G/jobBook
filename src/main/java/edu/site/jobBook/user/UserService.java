@@ -2,10 +2,11 @@ package edu.site.jobBook.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
-import edu.site.jobBook.user.password.Password;
+// import edu.site.jobBook.user.password.Password;
 import edu.site.jobBook.user.password.PasswordRepository;
-import jakarta.transaction.Transactional;
+// import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -13,23 +14,12 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordRepository passwordRepository;
+    // private final PasswordRepository passwordRepository;
 
     @Autowired
     public UserService(UserRepository userRepository, PasswordRepository passwordRepository) {
         this.userRepository = userRepository;
-        this.passwordRepository = passwordRepository;
-    }
-
-    @Transactional
-    public User createUserWithPassword(User user, String rawPassword) {
-        User savedUser = userRepository.save(user);
-        Password password = new Password();
-        password.setUser(savedUser);
-        password.setPassword(rawPassword);
-        passwordRepository.save(password);
-        savedUser.setPassword(password);    
-        return savedUser;
+        // this.passwordRepository = passwordRepository;
     }
 
     public void deleteUser(User user){
@@ -54,6 +44,10 @@ public class UserService {
 
     public List<User> findByUserType(String userType) {
         return userRepository.findByUserType(userType);
+    }
+
+    public Optional<User> findByProfileUsername(String username){
+        return userRepository.findByProfileUsername(username);
     }
 
     public User save(User user) {
