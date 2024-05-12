@@ -1,7 +1,5 @@
 package edu.site.jobBook.job;
 
-import java.util.UUID;
-
 import edu.site.jobBook.company.Company;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,23 +21,13 @@ public class Job {
     @Column(name = "title", nullable = false, length = 100)
     private String title;
 
-    @Column(name = "description", nullable = false, length = 1000)
-    private String description;
-
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
-    @Column(name = "posted_date", nullable = false)
-    private String postedDate;
+    @OneToOne(mappedBy = "job", cascade = CascadeType.ALL)
+    private JobDescription jobDescription;
 
-    @Column(name = "expiry_date", nullable = false)
-    private String expiryDate;
-
-    @Column(name = "location", nullable = false, length = 100)
-    private String location;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private JobStatus status;
+    @OneToOne(mappedBy = "job", cascade = CascadeType.ALL)
+    private JobDetails jobDetails;
 }
