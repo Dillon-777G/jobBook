@@ -39,7 +39,7 @@ public class JobServiceTest {
     @Test
     public void testGetJobById() {
         // Mock data
-        Company company = new Company(1,"ACME Corp", "Tech Company");
+        Company company = new Company(1,"ACME Corp", "Tech Company", null, null);
         Job mockJob = new Job(1L, "Software Engineer", company,null,null);
         
         when(jobRepository.findById(1L)).thenReturn(Optional.of(mockJob));
@@ -54,7 +54,7 @@ public class JobServiceTest {
     @Test
     public void testSaveJob() {
         // Mock data
-        Company company = new Company(1,"ACME Corp", "Tech Company");
+        Company company = new Company(1,"ACME Corp", "Tech Company", null, null);
         Job mockJob = new Job(1L, "Software Engineer", company,null,null);
 
         // Mock the save method of jobRepository
@@ -71,7 +71,7 @@ public class JobServiceTest {
     @Test
     public void testGetJobsByCompany() {
         // Mock data
-        Company company = new Company(1,"ACME Corp", "Tech Company");
+        Company company = new Company(1,"ACME Corp", "Tech Company", null, null);
         List<Job> mockJobs = new ArrayList<>();
         mockJobs.add(new Job(1L, "Software Engineer", company,null,null));
         mockJobs.add(new Job(2L, "Data Analyst", company,null,null));

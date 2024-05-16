@@ -41,7 +41,7 @@ public class JobControllerTest {
     @Test
     public void testGetJobById() throws Exception {
         // Mock data
-        Company company = new Company(1L, "ACME Corp", "Tech Company");
+        Company company = new Company(1L, "ACME Corp", "Tech Company", null, null);
         Job mockJob = new Job(1L, "Software Engineer", company, null, null);
         when(jobService.getJobById(1L)).thenReturn(mockJob);
 
@@ -64,7 +64,7 @@ public class JobControllerTest {
         @Test
     public void testCreateJob() throws Exception {
         // Mock data
-        Company company = new Company(1L, "ACME Corp", "Tech Company");
+        Company company = new Company(1L, "ACME Corp", "Tech Company", null, null);
         Job mockJob = new Job(1L, "Software Engineer", company, null, null);
         when(jobService.saveJob(any(Job.class))).thenReturn(mockJob);
 
