@@ -11,12 +11,18 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "POST")
+@JsonIgnoreProperties({"company", "comments"})
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,7 +34,9 @@ public class Post {
     private byte[] image;
     private long likes;
     private long shares ;
-    @OneToMany(mappedBy="post")
+    //troubleshooting
+    // @OneToMany(mappedBy="post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostComment> comments;
 
     //Testing for handling company posts

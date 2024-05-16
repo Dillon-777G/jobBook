@@ -13,12 +13,16 @@ import edu.site.jobBook.job.Job;
 import edu.site.jobBook.post.Post;
 import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+//troubleshooting
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "companies")
+@JsonIgnoreProperties({"posts", "jobs"})
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,13 +34,14 @@ public class Company {
     @Column(name = "description", length = 255)
     private String description;
 
-    // @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    // private List<Post> posts = new ArrayList<>();
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @Builder.Default
+    private List<Post> posts = new ArrayList<>();
 
     //waiting on other classes to be more developed
-    // @Builder.Default
-    // @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    // private List<Job> jobs = new ArrayList<>();
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @Builder.Default
+    private List<Job> jobs = new ArrayList<>();
 
     //https://stackoverflow.com/questions/71873676/java-override-equals-when-this-getclass-o-getclass-fails-but-shouldn
     @Override
