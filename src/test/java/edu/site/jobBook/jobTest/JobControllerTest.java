@@ -1,6 +1,7 @@
 package edu.site.jobBook.jobTest;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -61,18 +62,18 @@ public class JobControllerTest {
             .andExpect(status().isNotFound());
     }
 
-        @Test
+    @Test
     public void testCreateJob() throws Exception {
         // Mock data
         Company company = new Company(1L, "ACME Corp", "Tech Company", null, null);
         Job mockJob = new Job(1L, "Software Engineer", company, null, null);
-        when(jobService.saveJob(any(Job.class))).thenReturn(mockJob);
+        when(jobService.saveJob(any(Job.class), anyLong())).thenReturn(mockJob);
 
         // Perform POST request
         mockMvc.perform(post("/api/jobs")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"title\": \"Software Engineer\", \"company\": {\"name\": \"ACME Corp\", \"description\": \"Tech Company\"}}"))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.title").value("Software Engineer"));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"title\": \"Software Engineer\", \"companyId\": 1}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title").value("Software Engineer"));
     }
 }
