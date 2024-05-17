@@ -2,6 +2,7 @@ package edu.site.jobBook.jobTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import edu.site.jobBook.company.Company;
+import edu.site.jobBook.company.CompanyRepository;
 import edu.site.jobBook.job.Job;
 import edu.site.jobBook.job.JobRepository;
 import edu.site.jobBook.job.JobService;
@@ -27,6 +29,9 @@ public class JobServiceTest {
 
     @Mock
     private JobRepository jobRepository;
+
+    @Mock
+    private CompanyRepository companyRepository;
 
     @InjectMocks
     private JobService jobService;
@@ -57,11 +62,16 @@ public class JobServiceTest {
         Company company = new Company(1,"ACME Corp", "Tech Company", null, null);
         Job mockJob = new Job(1L, "Software Engineer", company,null,null);
 
+        // Mock the findById method of companyRepository
+        when(companyRepository.findById(anyLong())).thenReturn(Optional.of(company));
+        
+
         // Mock the save method of jobRepository
         when(jobRepository.save(mockJob)).thenReturn(mockJob);
 
         // Call the service method
-        Job savedJob = jobService.saveJob(mockJob);
+        Job savedJob = jobService.saveJob(mockJob, 1L);
+        // Job savedJob = jobService.saveJob(mockJob);
 
         // Verify that the job was saved correctly
         assertNotNull(savedJob);
