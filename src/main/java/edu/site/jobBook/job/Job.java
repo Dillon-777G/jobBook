@@ -1,6 +1,7 @@
 package edu.site.jobBook.job;
 
-import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import edu.site.jobBook.company.Company;
 import jakarta.persistence.*;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity // This annotation is required to specify the class as a JPA entity
 @Table(name = "JOBS")
+@JsonIgnoreProperties({"company", "jobDescription", "jobDetails"})
 public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,23 +25,14 @@ public class Job {
     @Column(name = "title", nullable = false, length = 100)
     private String title;
 
-    @Column(name = "description", nullable = false, length = 1000)
-    private String description;
-
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
+    @JsonIgnore//added to fix an overflow issue
     private Company company;
 
-    @Column(name = "posted_date", nullable = false)
-    private String postedDate;
+    @OneToOne(mappedBy = "job", cascade = CascadeType.ALL)
+    private JobDescription jobDescription;
 
-    @Column(name = "expiry_date", nullable = false)
-    private String expiryDate;
-
-    @Column(name = "location", nullable = false, length = 100)
-    private String location;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private JobStatus status;
+    @OneToOne(mappedBy = "job", cascade = CascadeType.ALL)
+    private JobDetails jobDetails;
 }
