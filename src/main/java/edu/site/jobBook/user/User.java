@@ -1,6 +1,9 @@
 package edu.site.jobBook.user;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import edu.site.jobBook.user.password.Password;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
