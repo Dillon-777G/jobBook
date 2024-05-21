@@ -1,13 +1,13 @@
-package edu.site.jobBook;
+// package edu.site.jobBook;
 
-import org.springframework.web.bind.annotation.*;
+// import org.springframework.web.bind.annotation.*;
 
-@RestController
-public class HelloController {  
+// @RestController
+// public class HelloController {  
 
-    @GetMapping("/")
-    public String Hello(){
-        return "Hello world!";
-    }
+//     @GetMapping("/")
+//     public String Hello(){
+//         return "Hello world!";
+//     }
     
-}
+// }

@@ -1,30 +1,40 @@
-// package edu.site.jobBook.config;
+package edu.site.jobBook.config;
 
-// import edu.site.jobBook.user.Profile;
-// import edu.site.jobBook.user.User;
-// import edu.site.jobBook.user.UserService;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.beans.factory.annotation.Qualifier;
-// import org.springframework.context.annotation.Bean;
-// import org.springframework.stereotype.Component;
+import edu.site.jobBook.user.AppUser;
+import edu.site.jobBook.user.UserService;
 
-// @Component
-// public class SystemConfig {
-//     @Autowired
-//     private UserService userService;
+import java.util.Set;
 
-//     @Bean
-//     @Qualifier("defaultUser1")
-//     public User getDefaultUser1() {
-//         var user = User.builder()
-//                 .userType("System User")
-//                 .profile(Profile.builder()
-//                         .firstName("Default1")
-//                         .lastName("Default1")
-//                         .email("default1@gmail.com")
-//                         .username("default1")
-//                         .build())
-//                 .build();
-//         return userService.save(user);
-//     }
-// }
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class SystemConfig {
+
+    @Autowired
+    private UserService userService;
+
+    @Bean
+    @Qualifier("defaultUser1")
+    public AppUser getDefaultUser1() {
+        AppUser user = AppUser.builder()
+                .username("default1")
+                .password("password")  // Note: Ensure this password is encoded
+                .roles(Set.of("ROLE_USER"))
+                .build();
+        return userService.save(user);
+    }
+
+    @Bean
+    @Qualifier("defaultUser2")
+    public AppUser getDefaultUser2() {
+        AppUser user = AppUser.builder()
+                .username("default2")
+                .password("password")  // Note: Ensure this password is encoded
+                .roles(Set.of("ROLE_USER"))
+                .build();
+        return userService.save(user);
+    }
+}
