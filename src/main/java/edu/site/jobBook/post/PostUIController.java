@@ -1,10 +1,13 @@
 package edu.site.jobBook.post;
 
+import edu.site.jobBook.post.dto.PostDTO;
 import edu.site.jobBook.user.User;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class PostUIController {
@@ -21,6 +24,17 @@ public class PostUIController {
     public String getAllPosts(Model model) {
         var posts = service.fetchAllUsersPost(user1);
         model.addAttribute("posts", posts);
+        model.addAttribute("postDTO", new PostDTO());
         return "post";
+    }
+
+    @PostMapping("/add-post")
+    public String publishPost(@ModelAttribute PostDTO postDTO) {
+        try {
+            service.createPost(postDTO, user1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/post";
     }
 }
