@@ -1,7 +1,7 @@
 package edu.site.jobBook.post;
 
 import edu.site.jobBook.post.dto.PostDTO;
-import edu.site.jobBook.user.User;
+import edu.site.jobBook.user.AppUser;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class PostUIController {
 
     private final PostService service;
-    private final User user1;
+    private final AppUser user1;
 
-    public PostUIController(PostService service, @Qualifier("defaultUser1") User user1) {
+    public PostUIController(PostService service, @Qualifier("defaultUser1") AppUser user1) {
         this.service = service;
         this.user1 = user1;
     }
