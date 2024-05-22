@@ -5,11 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaRepositories
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "edu.site.jobBook")
 public class JobBookApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(JobBookApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(JobBookApplication.class, args);
+    }
 }

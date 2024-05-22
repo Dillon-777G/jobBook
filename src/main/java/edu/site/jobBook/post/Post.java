@@ -2,7 +2,7 @@ package edu.site.jobBook.post;
 
 import edu.site.jobBook.company.Company;
 import edu.site.jobBook.post.comment.PostComment;
-import edu.site.jobBook.user.User;
+import edu.site.jobBook.user.AppUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +26,7 @@ public class Post {
     private Long id;
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    private AppUser user;
     private String caption;
     private byte[] image;
     private long likes;
@@ -41,4 +41,3 @@ public class Post {
     @JoinColumn(name = "company_id")
     private Company company;
 }
-

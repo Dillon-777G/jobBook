@@ -96,5 +96,3 @@ public class JobServiceTest {
         assertEquals("Data Analyst", result.get(1).getTitle());
     }
 }
-
-
