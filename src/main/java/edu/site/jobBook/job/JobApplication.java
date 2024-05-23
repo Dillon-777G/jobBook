@@ -1,7 +1,7 @@
 package edu.site.jobBook.job;
 
 
-import edu.site.jobBook.user.User;
+import edu.site.jobBook.user.AppUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +25,7 @@ public class JobApplication {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private AppUser user;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "application_date", nullable = false)

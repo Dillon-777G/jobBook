@@ -3,7 +3,7 @@ package edu.site.jobBook.post.comment;
 import edu.site.jobBook.post.Post;
 import edu.site.jobBook.post.PostService;
 import edu.site.jobBook.post.dto.PostCommentDTO;
-import edu.site.jobBook.user.User;
+import edu.site.jobBook.user.AppUser;
 import edu.site.jobBook.user.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class PostCommentService {
         this.postCommentRepository = postCommentRepository;
     }
 
-    public PostComment addComment(PostCommentDTO postCommentDTO, User user) {
+    public PostComment addComment(PostCommentDTO postCommentDTO, AppUser user) {
         var oUser = userRepository.findById(user.getId());
         if(oUser.isEmpty())
             throw new IllegalArgumentException("Invalid User");
