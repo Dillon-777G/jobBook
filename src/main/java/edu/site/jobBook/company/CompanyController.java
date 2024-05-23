@@ -2,7 +2,9 @@ package edu.site.jobBook.company;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
+
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,11 +22,14 @@ public class CompanyController {
 
     private final CompanyService companyService;
 
+
+
+
     @Autowired
     public CompanyController(CompanyService companyService) {
         this.companyService = companyService;
     }
-
+    
     @PostMapping
     @Operation(summary = "Add a new company", description = "Creates a new company and returns the created company")
     public ResponseEntity<Company> addCompany(@RequestBody Company company) {
