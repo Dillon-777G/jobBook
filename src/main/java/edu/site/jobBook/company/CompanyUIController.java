@@ -1,11 +1,13 @@
 package edu.site.jobBook.company;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class CompanyUIController {
@@ -17,11 +19,22 @@ public class CompanyUIController {
         this.companyService = companyService;
     }
 
-    @GetMapping("/company-page")
+    @GetMapping("/companies-page")
     public String companyPage(Model model) {
         List<Company> companies = companyService.findAllCompanies();
         model.addAttribute("companies", companies);
-        return "company-page";
+        return "companies-page";
+    }
+
+    @GetMapping("/company/{id}")
+    public String companyDetails(@PathVariable Long id, Model model) {
+        Optional<Company> company = companyService.findCompanyById(id);
+        if (company.isPresent()) {
+            model.addAttribute("company", company.get());
+            return "company-details";
+        } else {
+            return "redirect:/company-page";  // Redirect to the company list page if the company is not found
+        }
     }
     
 }
