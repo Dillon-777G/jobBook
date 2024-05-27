@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -12,6 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "JOB_DETAILS")
+//https://www.reddit.com/r/SpringBoot/comments/xvkkij/tostring_equals_and_hashcode/
+@ToString(exclude = "job")
 public class JobDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
