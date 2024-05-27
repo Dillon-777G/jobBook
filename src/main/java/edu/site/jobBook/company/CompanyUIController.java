@@ -31,9 +31,11 @@ public class CompanyUIController {
         Optional<Company> company = companyService.findCompanyById(id);
         if (company.isPresent()) {
             model.addAttribute("company", company.get());
+            model.addAttribute("jobs", companyService.findJobsByCompanyId(id));
+            model.addAttribute("posts", companyService.findPostsByCompanyId(id));
             return "company-details";
         } else {
-            return "redirect:/company-page";  // Redirect to the company list page if the company is not found
+            return "redirect:/companies-page";  // Redirect to the company list page if the company is not found
         }
     }
     

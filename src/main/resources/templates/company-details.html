@@ -11,15 +11,25 @@
 <body>
     <div th:replace="fragments/header :: header"></div>
     <div class="container">
-        <h1 class="my-4">Company List</h1>
-        <div class="company-grid">
-            <a th:each="company : ${companies}" th:href="@{'/company/' + ${company.id}}" class="company-item">
-                <div class="company-image">
-                    <img th:src="@{/images/placeholder.png}" alt="Company Logo" class="img-fluid">
-                </div>
-                <div class="company-name" th:text="${company.name}">Company Name</div>
-            </a>
-        </div>
+        <h1 class="my-4" th:text="${company.name}">Company Name</h1>
+        <p th:text="${company.description}">Company Description</p>
+        
+        <h2 class="my-4">Jobs</h2>
+        <ul class="list-group">
+            <li th:each="job : ${jobs}" class="list-group-item">
+                <h3 th:text="${job.title}">Job Title</h3>
+                <p th:text="${job.jobDescription}">Job Description</p>
+            </li>
+        </ul>
+        
+        <h2 class="my-4">Posts</h2>
+        <ul class="list-group">
+            <li th:each="post : ${posts}" class="list-group-item">
+                <h3 th:text="${post.caption}">Post Caption</h3>
+                <p th:text="${post.content}">Post Content</p>
+                <img th:if="${post.image != null}" th:src="@{/images/{image}(image=${post.image})}" alt="Post Image" class="img-fluid">
+            </li>
+        </ul>
     </div>
     <div th:replace="fragments/footer :: footer"></div>
 </body>
