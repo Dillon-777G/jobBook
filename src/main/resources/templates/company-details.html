@@ -25,8 +25,7 @@
         <h2 class="my-4">Posts</h2>
         <ul class="list-group">
             <li th:each="post : ${posts}" class="list-group-item">
-                <h3 th:text="${post.caption}">Post Caption</h3>
-                <p th:text="${post.content}">Post Content</p>
+                <p th:text="${post.caption}">Post Content</p>
                 <img th:if="${post.image != null}" th:src="@{/images/{image}(image=${post.image})}" alt="Post Image" class="img-fluid">
             </li>
         </ul>

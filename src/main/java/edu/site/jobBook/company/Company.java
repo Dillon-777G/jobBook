@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+
 
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +24,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "companies")
 @JsonIgnoreProperties({"posts", "jobs"})
-// @ToString(exclude = {"posts", "jobs"})
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
