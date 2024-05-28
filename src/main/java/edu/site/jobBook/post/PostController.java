@@ -3,7 +3,7 @@ package edu.site.jobBook.post;
 import edu.site.jobBook.post.comment.PostCommentService;
 import edu.site.jobBook.post.dto.PostCommentDTO;
 import edu.site.jobBook.post.dto.PostDTO;
-import edu.site.jobBook.user.User;
+import edu.site.jobBook.user.AppUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +26,11 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
     private final PostCommentService postCommentService;
-    private final User user1;    //for now using default user from SystemConfig
-    private final User user2;    //for now using default user from SystemConfig
+    private final AppUser user1;    //for now using default user from SystemConfig
+    private final AppUser user2;    //for now using default user from SystemConfig
 
     @Autowired
-    public PostController(PostService postService, PostCommentService postCommentService, @Qualifier("defaultUser1") User user1, @Qualifier("defaultUser2") User user2) {
+    public PostController(PostService postService, PostCommentService postCommentService, @Qualifier("defaultUser1") AppUser user1, @Qualifier("defaultUser2") AppUser user2) {
         this.postService = postService;
         this.postCommentService = postCommentService;
         this.user1 = user1;

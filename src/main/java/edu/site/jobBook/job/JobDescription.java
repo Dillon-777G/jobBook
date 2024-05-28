@@ -1,6 +1,5 @@
 package edu.site.jobBook.job;
 
-import edu.site.jobBook.company.Company;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
