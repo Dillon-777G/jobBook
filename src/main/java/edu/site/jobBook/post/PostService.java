@@ -2,7 +2,7 @@ package edu.site.jobBook.post;
 
 import edu.site.jobBook.post.comment.PostComment;
 import edu.site.jobBook.post.dto.PostDTO;
-import edu.site.jobBook.user.User;
+import edu.site.jobBook.user.AppUser;
 import edu.site.jobBook.user.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class PostService {
         this.userRepository = userRepository;
     }
 
-    public List<Post> fetchAllUsersPost(User user) {
+    public List<Post> fetchAllUsersPost(AppUser user) {
         return postRepository.findByUser(user);
     }
 
@@ -30,7 +30,7 @@ public class PostService {
         return postRepository.findById(id).orElse(null);
     }
 
-    public Post createPost(PostDTO postDTO, User user) {
+    public Post createPost(PostDTO postDTO, AppUser user) {
         var oUser = userRepository.findById(user.getId());
         if(oUser.isEmpty()) {
             throw new IllegalArgumentException("User not found");
