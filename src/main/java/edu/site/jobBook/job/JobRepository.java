@@ -8,4 +8,6 @@ import edu.site.jobBook.company.Company;
 
 public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> findByCompany(Company company);
+
+    List<Job> findByCompanyId(Long companyId);
 }
