@@ -1,4 +1,4 @@
-package edu.site.jobBook;
+package edu.site.jobBook.common;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
