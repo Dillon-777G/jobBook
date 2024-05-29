@@ -145,4 +145,13 @@ public class CompanyService {
         logger.info("Finding all companies");
         return (List<Company>) companyRepository.findAll();
     }
+
+
+    public List<Job> findJobsByCompanyId(Long companyId) {
+        return jobRepository.findByCompanyId(companyId);
+    }
+
+    public List<Post> findPostsByCompanyId(Long companyId) {
+        return postRepository.findByCompanyId(companyId);
+    }
 }
