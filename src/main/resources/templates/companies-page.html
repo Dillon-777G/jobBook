@@ -20,6 +20,7 @@
                     </a>
                     <div class="card-body">
                         <h5 class="card-title" th:text="${company.name}">Company Name</h5>
+                        <p th:if="${hiringStatusMap[company.id] != null}" th:text="'Hiring Status: ' + ${hiringStatusMap[company.id]}">Hiring Status</p>
                     </div>
                 </div>
             </div>

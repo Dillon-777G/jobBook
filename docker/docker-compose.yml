@@ -1,0 +1,30 @@
+#start:   docker-compose -f {path tp docker file}\docker-compose.yml up -d
+# alternative is cd to the docker folder and docker-compose up -d
+#stop:    docker-compose -f {path tp docker file}\docker-compose.yml down
+# alternative is cd to the docker folder and docker-compose down
+
+#access the redis: db docker exec -it jobBook-redis redis-cli
+
+#not recommended but since its a small project this should be fine
+
+# redis find all keys -> keys *
+#redis find all specific keys values -> keys {key}:*
+
+#there is a scan 
+
+#SCAN {int reperesenting iteration} MATCH {pattern}* COUNT {int}
+
+version: '3.9'
+
+services:
+  redis:
+    env_file: ./.env
+    image: redis:latest
+    container_name: jobBook-redis
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
