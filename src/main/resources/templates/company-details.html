@@ -13,7 +13,7 @@
     <div class="container my-4">
         <h1 class="mb-4" th:text="${company.name}">Company Name</h1>
         <p th:text="${company.description}">Company Description</p>
-
+        <p th:if="${hiringStatus != null}" th:text="'Hiring Status: ' + ${hiringStatus}">Hiring Status</p>
         <h2 class="my-4">Jobs</h2>
         <div class="row">
             <div th:each="job : ${jobs}" class="col-md-4 mb-4">
