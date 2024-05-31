@@ -31,16 +31,7 @@ public class SecurityConfig {
 				.csrf(csrf -> csrf.disable())  // Disable CSRF for H2 console
 				.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))  // Disable frame options for H2 console
 				.httpBasic(withDefaults())
-				.formLogin(formLogin -> formLogin
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
-                        .permitAll()
-                )
-				.logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll()
-                )
+				.formLogin(withDefaults())
 				.sessionManagement( session -> session
 					.maximumSessions(1)
 					.maxSessionsPreventsLogin(true)
