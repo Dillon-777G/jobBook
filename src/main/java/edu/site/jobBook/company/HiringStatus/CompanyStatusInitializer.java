@@ -1,14 +1,12 @@
 package edu.site.jobBook.company.HiringStatus;
 
-import edu.site.jobBook.company.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CompanyStatusInitializer implements CommandLineRunner{
-     @Autowired
-    private CompanyRepository companyRepository;
+    
 
     @Autowired
     private HiringStatusRepository hiringStatusRepository;
