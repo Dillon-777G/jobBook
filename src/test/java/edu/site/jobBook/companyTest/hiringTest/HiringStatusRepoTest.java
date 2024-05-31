@@ -99,10 +99,16 @@ public class HiringStatusRepoTest {
     }
 
     @Test
-    public void TestAdd() {
+    public void testAdd() {
+        CompanyHiringStatus newStatus = new CompanyHiringStatus(6L, HiringStatus.HIRING);
 
+        repository.save(newStatus);
 
+        CompanyHiringStatus found = repository.findById(6L).orElse(null);
 
+        assertNotNull(found);
+        assertEquals(newStatus.getCompanyId(), found.getCompanyId());
+        assertEquals(newStatus.getHiringStatus(), found.getHiringStatus());
 
     }
     
