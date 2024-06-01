@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
 import edu.site.jobBook.user.CustomUserDetailsService;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -19,26 +18,32 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		// @formatter:off
-		http
-				.authorizeHttpRequests((authorize) -> authorize
-						.requestMatchers("/h2-console/**", "/login", "/register", "/css**", "/js**").permitAll() 
-						.anyRequest().authenticated()
-						
-				)
-				.csrf(csrf -> csrf.disable())  // Disable CSRF for H2 console
-				.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))  // Disable frame options for H2 console
-				.httpBasic(withDefaults())
-				.formLogin(withDefaults())
-				.sessionManagement( session -> session
-					.maximumSessions(1)
-					.maxSessionsPreventsLogin(true)
-				);	
-		// @formatter:on
-		return http.build();
-	}
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/h2-console/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .csrf(csrf -> csrf.disable())  // Disable CSRF for H2 console
+            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))  // Disable frame options for H2 console
+            .httpBasic(withDefaults())
+            .formLogin(form -> form
+                .defaultSuccessUrl("/")
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("SESSIONID")
+            );
+            // .sessionManagement(session -> session
+            //     .maximumSessions(1)
+            //     .maxSessionsPreventsLogin(true)
+            // );
+        return http.build();
+    }
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -50,12 +55,11 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-	@Bean
+    @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
-
 }
