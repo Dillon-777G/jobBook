@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Home Page</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .scroll-box {
+            height: 200px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Specific content for the home page -->
+    <div layout:fragment="content">
+        <div class="container-fluid pb-3">
+            <h2>Admin Home</h2>
+            <p>Welcome, Admin! Use the form below to register a new user.</p>
+
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+            <form th:action="@{/register}" method="post">
+                <div>
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div>
+                    <label for="roles">Roles (comma separated)</label>
+                    <input type="text" id="roles" name="roles" required>
+                </div>
+                <div>
+                    <button type="submit">Register User</button>
+                </div>
+            </form>
+
+            <h3>Current Users</h3>
+            <div class="scroll-box">
+                <ul>
+                    <li th:each="user : ${users}">
+                        <span th:text="${user.username}">Username</span>
+                        <form th:action="@{/deleteUser}" method="post" style="display: inline;">
+                            <input type="hidden" name="username" th:value="${user.username}">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
