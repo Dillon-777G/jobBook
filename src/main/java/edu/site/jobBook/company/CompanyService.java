@@ -10,7 +10,7 @@ import edu.site.jobBook.job.Job;
 import edu.site.jobBook.job.JobRepository;
 import edu.site.jobBook.post.Post;
 import edu.site.jobBook.post.PostRepository;
-import jakarta.annotation.PostConstruct;
+
 
 import java.util.List;
 import java.util.Optional;
