@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    
+</head>
+<body>
+    <!-- Specific content for the home page -->
+    <div layout:fragment="content">
+        <div class="container-fluid pb-3">
+            <div class="row">
+                <!-- Left Panel -->
+                <div class="col-md-4">
+                    <div class="bg-light p-3 rounded">
+                        <h4 class="mb-4">Total Job Applications: <span th:text="${totalApplications}">0</span></h4>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="#" onclick="filterApplications('APPLIED')">Applied</a></li>
+                            <li class="list-group-item"><a href="#" onclick="filterApplications('UNDER_REVIEW')">Under Review</a></li>
+                            <li class="list-group-item"><a href="#" onclick="filterApplications('REJECTED')">Rejected</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Right Panel -->
+                <div class="col-md-8" >
+                    <div class="bg-light p-3 rounded" id="right-panel">
+                        <h2 class="mb-4">All Jobs</h2>
+                        <div class="row row-cols-1 row-cols-md-2 g-4" id="jobApplications">
+                            <!-- Iterate over job applications and display each card -->
+                            <div th:each="jobApp : ${jobApplications}" class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${jobApp.job.company.name}">Company</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted" th:text="${jobApp.job.title}">Title</h6>
+                                        <p class="card-text" th:text="${jobApp.status}"
+                                        
+                                        >Status</p>
+                                        <p class="card-text" th:text="${#dates.format(jobApp.applicationDate, 'yyyy-MM-dd HH:mm:ss')}">Date Applied</p>
+                                        <a th:href="@{/jobs/{id}(id=${jobApp.job.id})}" class="btn btn-primary">View Job</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- JavaScript to handle filter selection and AJAX requests -->
+    <script th:inline="javascript">
+        function filterApplications(filter) {
+            console.log(filter);
+            // Make an AJAX request to fetch job details
+            $.get("/jobs/myjobs/filter/" + filter, function(data) {
+                $('#right-panel').html(data);
+            });
+        }
+    </script>
+
+    </div>
+</body>
+</html>
