@@ -1,0 +1,24 @@
+.job-card {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+    transition: transform 0.2s;
+}
+.job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.card-title {
+    color: #007bff;
+}
+.card-subtitle {
+    color: #6c757d;
+}
+.btn-view-job {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+}
+.btn-view-job:hover {
+    background-color: #0056b3;
+}

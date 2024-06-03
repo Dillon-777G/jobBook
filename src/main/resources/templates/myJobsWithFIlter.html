@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<h2 class="mb-4"><span th:text="${filter}">0</span></h2>
+<div th:if="${jobApplications.empty}">
+    <p>No data</p>
+</div>
+<div th:else>
+                        <div class="row row-cols-1 row-cols-md-2 g-4" id="jobApplications">
+                            <!-- Iterate over job applications and display each card -->
+                            <div th:each="jobApp : ${jobApplications}" class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${jobApp.job.company.name}">Company</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted" th:text="${jobApp.job.title}">Title</h6>
+                                        <p class="card-text" th:text="${jobApp.status}">Status</p>
+                                        <p class="card-text" th:text="${#dates.format(jobApp.applicationDate, 'yyyy-MM-dd HH:mm:ss')}">Date Applied</p>
+                                        <a th:href="@{/jobs/{id}(id=${jobApp.job.id})}" class="btn btn-primary">View Job</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+</body>
+</html>

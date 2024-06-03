@@ -32,7 +32,7 @@ public class SecurityConfig {
 						.anyRequest().authenticated()
 						
 				)
-				.csrf(csrf -> csrf.disable())  // Disable CSRF for H2 console
+				.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))  // Disable CSRF for H2 console
 				.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))  // Disable frame options for H2 console
 				.httpBasic(withDefaults())
 				.formLogin(withDefaults());
