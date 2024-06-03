@@ -13,14 +13,24 @@
     <div class="container my-4">
         <h1 class="mb-4" th:text="${company.name}">Company Name</h1>
         <p th:text="${company.description}">Company Description</p>
-
+        <p th:if="${hiringStatus != null}">
+            Hiring Status:
+            <span th:text="${hiringStatusDescriptions[hiringStatus.name()]}">Hiring Status</span>
+        </p>
+        
         <h2 class="my-4">Jobs</h2>
         <div class="row">
             <div th:each="job : ${jobs}" class="col-md-4 mb-4">
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${job.title}">Job Title</h5>
-                        <p class="card-text" th:text="${job.jobDescription}">Job Description</p>
+                        <p class="card-text">
+                            <strong>Overview:</strong> <span th:text="${job.jobDescription.overview}">Job Overview</span><br>
+                            <strong>Responsibilities:</strong> <span th:text="${job.jobDescription.responsibilities}">Job Responsibilities</span><br>
+                            <strong>Skills:</strong> <span th:text="${job.jobDescription.skills}">Job Skills</span><br>
+                            <strong>Qualification:</strong> <span th:text="${job.jobDescription.qualification}">Job Qualification</span><br>
+                            <strong>Benefits:</strong> <span th:text="${job.jobDescription.benefits}">Job Benefits</span>
+                        </p>
                     </div>
                 </div>
             </div>

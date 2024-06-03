@@ -3,10 +3,14 @@ package edu.site.jobBook.company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.site.jobBook.company.HiringStatus.CompanyHiringStatus;
+import edu.site.jobBook.company.HiringStatus.HiringStatus;
+import edu.site.jobBook.company.HiringStatus.HiringStatusRepository;
 import edu.site.jobBook.job.Job;
 import edu.site.jobBook.job.JobRepository;
 import edu.site.jobBook.post.Post;
 import edu.site.jobBook.post.PostRepository;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +30,23 @@ public class CompanyService {
 
     @Autowired
     private JobRepository jobRepository;
+
+    @Autowired
+    private HiringStatusRepository hiringStatusRepository;
+
+
+    public CompanyHiringStatus getHiringStatus(long companyId) {
+        return hiringStatusRepository.findById(companyId).orElse(new CompanyHiringStatus(companyId, HiringStatus.UNKNOWN));
+    }
+
+    public List<CompanyHiringStatus> getCompaniesHiring() {
+        return hiringStatusRepository.findByHiringStatus(HiringStatus.HIRING);
+    }
+
+    public Optional<CompanyHiringStatus> findHiringStatusByCompanyId(Long companyId) {
+        return hiringStatusRepository.findById(companyId);
+    }
+
 
     public Company addCompany(Company company) {
         logger.info("Adding company: {}", company.getName());

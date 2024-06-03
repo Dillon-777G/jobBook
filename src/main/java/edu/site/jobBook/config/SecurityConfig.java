@@ -28,8 +28,12 @@ public class SecurityConfig {
 		// @formatter:off
 		http
 				.authorizeHttpRequests((authorize) -> authorize
+						.requestMatchers("/h2-console/**").permitAll() 
 						.anyRequest().authenticated()
+						
 				)
+				.csrf(csrf -> csrf.disable())  // Disable CSRF for H2 console
+				.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))  // Disable frame options for H2 console
 				.httpBasic(withDefaults())
 				.formLogin(withDefaults());
 		// @formatter:on
