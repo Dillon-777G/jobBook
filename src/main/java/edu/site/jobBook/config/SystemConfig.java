@@ -2,8 +2,6 @@ package edu.site.jobBook.config;
 
 import edu.site.jobBook.user.AppUser;
 import edu.site.jobBook.user.UserService;
-import jakarta.annotation.PostConstruct;
-
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
