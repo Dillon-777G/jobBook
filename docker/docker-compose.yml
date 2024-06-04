@@ -1,9 +1,10 @@
 #start:   docker-compose -f {path tp docker file}\docker-compose.yml up -d
 # alternative is cd to the docker folder and docker-compose up -d
+
 #stop:    docker-compose -f {path tp docker file}\docker-compose.yml down
 # alternative is cd to the docker folder and docker-compose down
 
-#access the redis: db docker exec -it jobBook-redis redis-cli
+#access the redis: docker exec -it jobBook-redis redis-cli
 
 #not recommended but since its a small project this should be fine
 
