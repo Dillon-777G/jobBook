@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +34,26 @@ public class UserActivityService {
         }
         logger.info("Found {} activities for userId: {}", activities.size(), userId);
         return activities.stream().map(activity -> (UserActivity) activity).collect(Collectors.toList());
+    }
+
+    public List<UserActivity> getAllUserActivities() {
+        logger.info("Retrieving all user activities");
+        Set<String> keys = redisTemplate.keys(KEY + ":*");
+        if (keys == null || keys.isEmpty()) {
+            logger.warn("No user activities found");
+            return Collections.emptyList();
+        }
+        return keys.stream()
+                .flatMap(key -> {
+                    List<Object> activities = redisTemplate.opsForList().range(key, 0, -1);
+                    if (activities == null) {
+                        logger.warn("No activities found for key: {}", key);
+                        return Collections.emptyList().stream();
+                    }
+                    return activities.stream();
+                })
+                .map(activity -> (UserActivity) activity)
+                .collect(Collectors.toList());
     }
 
     public void deleteUserActivities(Long userId) {
