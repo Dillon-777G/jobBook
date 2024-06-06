@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+</head>
+<body>
+    <!-- Specific content for the home page -->
+    <div layout:fragment="content">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div th:if="${message}" class="alert alert-success" role="alert">
+                        <span th:text="${message}"></span>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">Edit Job</div>
+                        <div class="card-body">
+                            <form th:action="@{/jobs/update-job}" th:object="${job}" method="post">
+                                <input type="hidden" th:field="*{id}"/>
+                                <div class="form-group">
+                                    <label for="title">Job Title</label>
+                                    <input type="text" class="form-control" id="title" th:field="*{title}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="company">Company</label>
+                                    <select class="form-control" id="company" name="companyId" required>
+                                        <option th:each="company : ${companies}" th:value="${company.id}" th:text="${company.name}" th:selected="${company.id} == ${job.company.id}"></option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Additional fields for JobDescription and JobDetails -->
+                                <div class="form-group">
+                                    <label for="overview">Overview</label>
+                                    <textarea class="form-control" id="overview" th:field="*{jobDescription.overview}" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="responsibilities">Responsibilities</label>
+                                    <textarea class="form-control" id="responsibilities" th:field="*{jobDescription.responsibilities}" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="skills">Skills</label>
+                                    <textarea class="form-control" id="skills" th:field="*{jobDescription.skills}" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="qualification">Qualification</label>
+                                    <textarea class="form-control" id="qualification" th:field="*{jobDescription.qualification}" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="benefits">Benefits</label>
+                                    <textarea class="form-control" id="benefits" th:field="*{jobDescription.benefits}" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="location">Location</label>
+                                    <input type="text" class="form-control" id="location" th:field="*{jobDetails.location}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="startDate">Start Date</label>
+                                    <input type="date" class="form-control" id="startDate" th:field="*{jobDetails.startDate}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="postedDate">Posted Date</label>
+                                    <input type="date" class="form-control" id="postedDate" th:field="*{jobDetails.postedDate}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="expiryDate">Expiry Date</label>
+                                    <input type="date" class="form-control" id="expiryDate" th:field="*{jobDetails.expiryDate}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <select class="form-control" id="status" th:field="*{jobDetails.status}" required>
+                                        <option value="ACTIVE">Active</option>
+                                        <option value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update Job</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

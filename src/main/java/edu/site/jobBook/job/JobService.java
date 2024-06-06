@@ -1,17 +1,23 @@
 package edu.site.jobBook.job;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.site.jobBook.company.Company;
 import edu.site.jobBook.company.CompanyRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class JobService {
 
-    //trouble shooting
+    private static final Logger logger = LoggerFactory.getLogger(JobService.class);
+    
     private final JobRepository jobRepository;
     private final CompanyRepository companyRepository;
 
@@ -21,49 +27,146 @@ public class JobService {
         this.companyRepository = companyRepository;
     }
 
-    // private  final JobRepository jobRepository;
-
-    // @Autowired
-    // public JobService(JobRepository jobRepository) {
-    //     this.jobRepository = jobRepository;
-    // }
-
     public List<Job> getAllJobs() {
-        return jobRepository.findAll();
+        try {
+            return jobRepository.findAll();
+        } catch (Exception e) {
+            logger.error("Error retrieving all jobs", e);
+            throw new RuntimeException("Error retrieving all jobs", e);
+        }
     }
 
     public Job getJobById(Long jobId) {
-        return jobRepository.findById(jobId).orElse(null);
+        try {
+            return jobRepository.findById(jobId).orElseThrow(() -> new EntityNotFoundException("Job not found"));
+        } catch (EntityNotFoundException e) {
+            logger.error("Job not found with ID: {}", jobId, e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Error retrieving job with ID: {}", jobId, e);
+            throw new RuntimeException("Error retrieving job with ID: " + jobId, e);
+        }
     }
 
+    @Transactional
     public Job saveJob(Job job, Long companyId) {
-        Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new EntityNotFoundException("Company not found"));
-        job.setCompany(company);
+        try {
+            Company company = companyRepository.findById(companyId)
+                    .orElseThrow(() -> new EntityNotFoundException("Company not found"));
+            job.setCompany(company);
 
-        return jobRepository.save(job);
+            if (job.getJobDescription() != null) {
+                job.getJobDescription().setJob(job);
+            }
+            if (job.getJobDetails() != null) {
+                job.getJobDetails().setJob(job);
+            }
+
+            return jobRepository.save(job);
+        } catch (EntityNotFoundException e) {
+            logger.error("Company not found with ID: {}", companyId, e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Error saving job", e);
+            throw new RuntimeException("Error saving job", e);
+        }
     }
 
-    // public Job saveJob(Job job) {
-    //     return jobRepository.save(job);
-    // }
+    @Transactional
+    public Job updateJob(Job updatedJob, Long companyId) {
+        try {
+            Job existingJob = jobRepository.findById(updatedJob.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Job not found"));
+
+            Company updatedCompany = companyRepository.findById(companyId)
+                    .orElseThrow(() -> new EntityNotFoundException("Company not found"));
+
+            existingJob.setTitle(updatedJob.getTitle());
+            existingJob.setCompany(updatedCompany);
+
+            JobDescription updatedJobDescription = updatedJob.getJobDescription();
+            JobDescription existingJobDescription = existingJob.getJobDescription();
+            if (existingJobDescription == null) {
+                existingJobDescription = new JobDescription();
+                existingJobDescription.setJob(existingJob);
+                existingJob.setJobDescription(existingJobDescription);
+            }
+            existingJobDescription.setOverview(updatedJobDescription.getOverview());
+            existingJobDescription.setResponsibilities(updatedJobDescription.getResponsibilities());
+            existingJobDescription.setSkills(updatedJobDescription.getSkills());
+            existingJobDescription.setQualification(updatedJobDescription.getQualification());
+            existingJobDescription.setBenefits(updatedJobDescription.getBenefits());
+
+            JobDetails updatedJobDetails = updatedJob.getJobDetails();
+            JobDetails existingJobDetails = existingJob.getJobDetails();
+            if (existingJobDetails == null) {
+                existingJobDetails = new JobDetails();
+                existingJobDetails.setJob(existingJob);
+                existingJob.setJobDetails(existingJobDetails);
+            }
+            existingJobDetails.setStartDate(updatedJobDetails.getStartDate());
+            existingJobDetails.setPostedDate(updatedJobDetails.getPostedDate());
+            existingJobDetails.setExpiryDate(updatedJobDetails.getExpiryDate());
+            existingJobDetails.setLocation(updatedJobDetails.getLocation());
+            existingJobDetails.setStatus(updatedJobDetails.getStatus());
+
+            return jobRepository.save(existingJob);
+        } catch (EntityNotFoundException e) {
+            logger.error("Entity not found", e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Error updating job", e);
+            throw new RuntimeException("Error updating job", e);
+        }
+    }
+
+    public List<Company> getAllCompanies() {
+        try {
+            List<Company> companyList = new ArrayList<>();
+            companyRepository.findAll().forEach(companyList::add);
+            return companyList;
+        } catch (Exception e) {
+            logger.error("Error retrieving all companies", e);
+            throw new RuntimeException("Error retrieving all companies", e);
+        }
+    }
 
     public void deleteJobById(Long jobId) {
-        boolean exists = jobRepository.existsById(jobId);
-        if (!exists) {
-            throw new IllegalStateException("Job with id " + jobId + " does not exist");
+        try {
+            boolean exists = jobRepository.existsById(jobId);
+            if (!exists) {
+                throw new IllegalStateException("Job with id " + jobId + " does not exist");
+            }
+            jobRepository.deleteById(jobId);
+        } catch (Exception e) {
+            logger.error("Error deleting job with ID: {}", jobId, e);
+            throw new RuntimeException("Error deleting job with ID: " + jobId, e);
         }
-        jobRepository.deleteById(jobId);
-    }
-
-    public Job updateJob(Job job) {
-     
-        return jobRepository.save(job);
     }
 
     public List<Job> getJobsByCompany(Company company) {
-        return jobRepository.findByCompany(company);
+        try {
+            return jobRepository.findByCompany(company);
+        } catch (Exception e) {
+            logger.error("Error retrieving jobs by company", e);
+            throw new RuntimeException("Error retrieving jobs by company", e);
+        }
     }
+
+    public JobDescription getJobDescription(Long jobId) {
+        try {
+            Job job = jobRepository.findById(jobId).orElseThrow(() -> new EntityNotFoundException("Job not found"));
+            return job.getJobDescription();
+        } catch (EntityNotFoundException e) {
+            logger.error("Job not found with ID: {}", jobId, e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Error retrieving job description for job with ID: {}", jobId, e);
+            throw new RuntimeException("Error retrieving job description for job with ID: " + jobId, e);
+        }
+    }
+
+
 
     
 }

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+</head>
+<body>
+    <!-- Specific content for the home page -->
+    <div layout:fragment="content">
+    <div class="container-fluid pb-3">
+      <div class="d-grid gap-3" style="grid-template-columns: 1fr 2fr;">
+        <div class="bg-body-tertiary border rounded-3">
+            <div th:if="${message}" class="alert alert-success" role="alert">
+                <span th:text="${message}"></span>
+            </div>
+            <h4 class="p-3">Job Listings</h4>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" th:each="job : ${jobs}">
+                    <a href="#" th:attr="onclick='displayJobDetails(' + ${job.id} + ')'" class="d-block job-link" th:data-id="${job.id}">
+                        
+                        <h5 th:text="${job.title}">Job Title</h5>
+                        <p class="mb-1" th:text="${job.company.name}">Company Name</p>
+                        <small class="text-muted" th:text="${job.jobDetails.location}">Location</small><br>
+                        <small class="text-muted" th:text="${job.jobDetails.postedDate}">Posted Date</small>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="bg-body-tertiary border rounded-3" id="right-panel">
+           
+        </div>
+      </div>
+      <script th:inline="javascript">
+        function displayJobDetails(jobId) {
+            console.log(jobId);
+            // Make an AJAX request to fetch job details
+            $.get("/jobs/details/" + jobId, function(data) {
+                $('#right-panel').html(data);
+            });
+        }
+    </script>
+    </div>
+
+  </div>
+</body>
+</html>

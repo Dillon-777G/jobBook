@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Job Details</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container mt-5">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5>
+                        <a th:href="@{/company/{id}(id=${job.company.id})}" th:text="${job.company.name}" class="text-primary company-link">Company Name</a>
+                    </h5>
+                    <h3 th:text="${job.title}">Job Title</h3>
+                    <p><strong>Location: </strong><span th:text="${job.jobDetails.location}">Location</span></p>
+                    <p><strong>Skills: </strong><span th:text="${job.jobDescription.skills}">Skills</span></p>
+                    <button type="button" class="btn btn-primary" id="applyButton"
+                        th:if="${!jobAlreadyApplied}"  
+                        th:attr="data-job-id=${job.id}"       
+                        data-bs-toggle="modal" data-bs-target="#exampleModal">Apply</button>
+                    <button type="button" class="btn btn-success" disabled="disabled"
+                        th:if="${jobAlreadyApplied}">Applied</button> 
+
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3>About the Job</h3>
+                    <p><strong>Overview: </strong><span th:text="${job.jobDescription.overview}">Overview</span></p>
+                    <p><strong>Responsibilities: </strong><span th:text="${job.jobDescription.responsibilities}">Responsibilities</span></p>
+                    <p><strong>Qualifications: </strong><span th:text="${job.jobDescription.qualification}">Qualifications</span></p>
+                    <p><strong>Benefits: </strong><span th:text="${job.jobDescription.benefits}">Benefits</span></p>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4>About the Company</h4>
+                    <h5>
+                        <a th:href="@{/company/{id}(id=${job.company.id})}" th:text="${job.company.name}" class="text-primary company-link">Company Name</a>
+                    </h5>
+                    <p th:text="${job.company.description}">Company Description</p>
+                </div>
+            </div>
+        </div>
+
+ <!-- Modal -->
+ <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Apply for Job</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="applyForm">
+            <div class="mb-3">
+                <label for="name" class="form-label">Your Name</label>
+                <input type="label" class="form-control" id="name" required>
+              </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Your Email</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Your Pone</label>
+                <input type="text" class="form-control" id="phone" required>
+              </div>
+              <input type="hidden" id="jobId" name="jobId">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="submitApplication()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+        
+  <script>
+    function getCsrfToken() {
+        return {
+            header: $('meta[name="_csrf_header"]').attr('content'),
+            token: $('meta[name="_csrf"]').attr('content')
+        };
+    }
+
+    $('#exampleModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var jobId = button.data('job-id');
+        console.log(jobId);
+        var modal = $(this);
+        modal.find('#jobId').val(jobId);
+    });
+
+    $('#exampleModal').on('hidden.bs.modal', function (e) {
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+    });
+
+    function submitApplication() {
+        var csrf = getCsrfToken();
+        var jobId = $('#jobId').val();
+        console.log('New');
+        console.log(jobId);
+        console.log(csrf.header);
+        console.log(csrf.token);
+        $.ajax({
+            url: '/jobs/apply',
+            method: 'POST',
+            contentType: 'application/json',
+                data: JSON.stringify({
+                    jobId: jobId
+                }),
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(csrf.header, csrf.token);
+            },
+            success: function(response) {
+                alert(response);
+                $('#exampleModal').modal('hide');
+                $('#applyButton').prop('disabled', true).text('Applied').removeClass('btn-primary').addClass('btn-success');
+            },
+            error: function() {
+                console.log(error.responseText);
+                alert('Error submitting application. Please try again.');
+            }
+        });
+    }
+</script>
+
+
+    </div>
+    
+</body>
+</html>

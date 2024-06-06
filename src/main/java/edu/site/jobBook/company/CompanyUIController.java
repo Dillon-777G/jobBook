@@ -29,6 +29,7 @@ public class CompanyUIController {
     private final UserActivityService userActivityService;
     private final CompanyService companyService;
     private final HiringStatusService hiringStatusService;
+
     @Autowired
     public CompanyUIController(CompanyService companyService, HiringStatusService hiringStatusService, UserActivityService userActivityService) {
         this.companyService = companyService;
@@ -50,15 +51,27 @@ public class CompanyUIController {
         userActivityService.saveUserActivity(activity);
 
         List<Company> companies = companyService.findAllCompanies();
-        Map<Long, HiringStatus> hiringStatusMap = new HashMap<>();
+        Map<Long, String> hiringStatusMap = new HashMap<>();
         
         companies.forEach(company -> {
             HiringStatus status = hiringStatusService.getHiringStatus(company.getId());
-            hiringStatusMap.put(company.getId(), status);
+            if (status != null) {
+                hiringStatusMap.put(company.getId(), status.name());
+            } else {
+                hiringStatusMap.put(company.getId(), "UNKNOWN");
+            }
         });
-        
+
+        // Create a map for hiring status descriptions
+        Map<String, String> hiringStatusDescriptions = new HashMap<>();
+        hiringStatusDescriptions.put("HIRING", "Hiring");
+        hiringStatusDescriptions.put("NOT_HIRING", "Not Hiring");
+        hiringStatusDescriptions.put("UNKNOWN", "Unknown");
+
         model.addAttribute("companies", companies);
         model.addAttribute("hiringStatusMap", hiringStatusMap);
+        model.addAttribute("hiringStatusDescriptions", hiringStatusDescriptions);
+
         return "companies-page";
     }
 
@@ -82,10 +95,17 @@ public class CompanyUIController {
             model.addAttribute("jobs", companyService.findJobsByCompanyId(id));
             model.addAttribute("posts", companyService.findPostsByCompanyId(id));
             model.addAttribute("hiringStatus", status);
+
+            // Create a map for hiring status descriptions
+            Map<String, String> hiringStatusDescriptions = new HashMap<>();
+            hiringStatusDescriptions.put("HIRING", "Hiring");
+            hiringStatusDescriptions.put("NOT_HIRING", "Not Hiring");
+            hiringStatusDescriptions.put("UNKNOWN", "Unknown");
+            model.addAttribute("hiringStatusDescriptions", hiringStatusDescriptions);
+
             return "company-details";
         } else {
             return "redirect:/companies-page";  // Redirect to the company list page if the company is not found
         }
     }
-    
 }
