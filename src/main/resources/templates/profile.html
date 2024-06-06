@@ -20,6 +20,10 @@
                         <li th:each="role : ${roles}" th:text="${role.authority}"></li>
                     </ul>
                 </p>
+                <h3>Activity</h3>
+                <ul>
+                    <li th:each="activity : ${activities}" th:text="${activity.activity}"></li>
+                </ul>
             </div>
         </div>
     </div>

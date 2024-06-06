@@ -27,8 +27,13 @@
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 			<version>3.1.2</version>
 		</dependency>
+		<dependency>
+   			 <groupId>org.springframework.session</groupId>
+    		<artifactId>spring-session-data-redis</artifactId>
+		</dependency>
 		<!--end  -->
 
+		<!-- Spring Starter-->
 		<dependency>
         	<groupId>org.springframework.boot</groupId>
         	<artifactId>spring-boot-starter</artifactId>
@@ -44,6 +49,7 @@
         	<artifactId>spring-boot-starter-log4j2</artifactId>
     	</dependency>
 
+		<!-- Spring DevTools -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -51,23 +57,34 @@
 			<optional>true</optional>
 		</dependency>
 		
+		<!-- Spring Starter Test-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
 
-		<!-- Security -->
+		<!-- Security/Session -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		<dependency>
+    		<groupId>org.springframework.security</groupId>
+    		<artifactId>spring-security-config</artifactId>
+		</dependency>
+		<dependency>
+    		<groupId>org.springframework.security</groupId>
+    		<artifactId>spring-security-web</artifactId>
+		</dependency>
+
 		
 		<!-- jpa -->
 		<dependency>
@@ -92,6 +109,8 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.2.0</version>
 		</dependency>
+
+		<!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -103,7 +122,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-
 		<dependency>
 			<groupId>nz.net.ultraq.thymeleaf</groupId>
 			<artifactId>thymeleaf-layout-dialect</artifactId>

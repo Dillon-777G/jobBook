@@ -6,39 +6,38 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-// import org.springframework.security.core.userdetails.User;
-// import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-// import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import edu.site.jobBook.user.CustomUserDetailsService;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		// @formatter:off
-		http
-				.authorizeHttpRequests((authorize) -> authorize
-						.requestMatchers("/h2-console/**").permitAll() 
-						.anyRequest().authenticated()
-						
-				)
-				.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))  // Disable CSRF for H2 console
-				.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))  // Disable frame options for H2 console
-				.httpBasic(withDefaults())
-				.formLogin(withDefaults());
-		// @formatter:on
-		return http.build();
-	}
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationSuccessHandler successHandler) throws Exception {
+        http
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/h2-console/**", "/login", "/register").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
+            )
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))  // Disable CSRF for H2 console  // Disable CSRF for H2 console
+            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))  // Disable frame options for H2 console
+            .httpBasic(withDefaults())
+            .formLogin(form -> form
+                .permitAll()
+                .successHandler(successHandler)
+            );
+        return http.build();
+    }
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -50,25 +49,11 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-	@Bean
+    @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
-
-	// @formatter:off
-	// @Bean
-	// public InMemoryUserDetailsManager userDetailsService() {
-	// 	@SuppressWarnings("deprecation")
-    //     UserDetails user = User.withDefaultPasswordEncoder()
-	// 			.username("user")
-	// 			.password("password")
-	// 			.roles("USER")
-	// 			.build();
-	// 	return new InMemoryUserDetailsManager(user);
-	// }
-	// @formatter:on
-
 }
