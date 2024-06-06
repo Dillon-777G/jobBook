@@ -8,7 +8,9 @@
                 <h5>
                     <a th:href="@{/company/{id}(id=${job.company.id})}" th:text="${job.company.name}" class="text-primary company-link">Company Name</a>
                 </h5>
-                <h3 th:text="${job.title}">Job Title</h3>
+                <h3> 
+                    <a th:href="@{/jobs/{id}(id=${job.id})}" th:text="${job.title}"  class="text-success">Job Title</a>
+                </h3>
                 <p><strong>Location: </strong><span th:text="${job.jobDetails.location}">Location</span></p>
                 <p><strong>Skills: </strong><span th:text="${job.jobDescription.skills}">Skills</span></p>
 
