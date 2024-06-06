@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import java.lang.reflect.Field;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,12 +22,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+
 import edu.site.jobBook.company.Company;
 import edu.site.jobBook.job.Job;
 import edu.site.jobBook.job.JobApplicationService;
 import edu.site.jobBook.job.JobController;
 import edu.site.jobBook.job.JobService;
 import edu.site.jobBook.user.AppUser;
+import edu.site.jobBook.user.UserActivityService;
 import edu.site.jobBook.user.UserRepository;
 
 public class JobControllerTest {
@@ -41,13 +50,51 @@ public class JobControllerTest {
     @Mock
     private UserRepository userRepository;
 
+    // Mock UserActivityService
+    @Mock
+    private UserActivityService userActivityService;
+
+    // Mock Authentication and SecurityContext
+    @Mock
+    private Authentication authentication;
+
+    @Mock
+    private SecurityContext securityContext;
+
+    @Mock
+    private Principal principal;
+
     @InjectMocks
     private JobController jobController;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+
+        
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        
+        AppUser appUser = new AppUser();
+        appUser.setId(1L);  // Ensure ID is set
+        appUser.setUsername("user");
+        when(authentication.getPrincipal()).thenReturn(appUser);
+
+        
+        setField(jobController, "userActivityService", userActivityService);
+
+      
+        when(principal.getName()).thenReturn("user");
+
         mockMvc = MockMvcBuilders.standaloneSetup(jobController).build();
+    }
+
+    
+    private void setField(Object target, String fieldName, Object value) throws Exception {
+        Field field = target.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(target, value);
     }
 
     @Test
@@ -59,6 +106,7 @@ public class JobControllerTest {
         Job job2 = new Job();
         job2.setId(2L);
         job2.setTitle("Job 2");
+        
 
         List<Job> jobs = Arrays.asList(job1, job2);
 
@@ -89,12 +137,11 @@ public class JobControllerTest {
         job.setId(jobId);
         job.setTitle("Job 1");
 
-        Principal principal = () -> "user";
 
         when(jobService.getJobById(jobId)).thenReturn(job);
         when(jobApplicationService.hasUserAppliedForJob(any(AppUser.class), any(Job.class))).thenReturn(false);
 
-        mockMvc.perform(get("/jobs/{id}", jobId).principal(principal))
+        mockMvc.perform(get("/jobs/{id}", jobId))
             .andExpect(status().isOk())
             .andExpect(model().attributeExists("job"))
             .andExpect(model().attribute("job", job))
@@ -103,10 +150,10 @@ public class JobControllerTest {
 
     @Test
     public void testMyJobs() throws Exception {
-        Principal principal = () -> "user";
-
         AppUser user = new AppUser();
+        user.setId(1L);  // Ensure ID is set
         user.setUsername("user");
+        when(authentication.getPrincipal()).thenReturn(user);
 
         when(userRepository.findByUsername("user")).thenReturn(user);
         when(jobApplicationService.getApplicationsByUser(user)).thenReturn(Collections.emptyList());

@@ -57,7 +57,7 @@ public class JobController {
                 .activity("Viewed jobs page")
                 .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build());
-        return "jobs";
+        return "jobsList";
     }
 
     @GetMapping("/{id}")
@@ -84,7 +84,7 @@ public class JobController {
         model.addAttribute("totalApplications", jobApplications.size());
         model.addAttribute("jobApplications", jobApplications);
 
-        return "myjobs";
+        return "myjobspage";
     }
 
     @GetMapping("/myjobs/filter/{filter}")
