@@ -2,7 +2,7 @@ name: CI Alex branches
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "milesont-3" ]
   pull_request:
     branches: [ "main" ]
 
