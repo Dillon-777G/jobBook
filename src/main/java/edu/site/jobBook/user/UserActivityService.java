@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +35,11 @@ public class UserActivityService {
             return Collections.emptyList();
         }
         logger.info("Found {} activities for userId: {}", activities.size(), userId);
-        return activities.stream().map(activity -> (UserActivity) activity).collect(Collectors.toList());
+        return activities.stream()
+                .map(activity -> (UserActivity) activity)
+                .sorted((a1, a2) -> LocalDateTime.parse(a2.getTimestamp(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                        .compareTo(LocalDateTime.parse(a1.getTimestamp(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))))
+                .collect(Collectors.toList());
     }
 
     public List<UserActivity> getAllUserActivities() {
@@ -53,6 +59,8 @@ public class UserActivityService {
                     return activities.stream();
                 })
                 .map(activity -> (UserActivity) activity)
+                .sorted((a1, a2) -> LocalDateTime.parse(a2.getTimestamp(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                        .compareTo(LocalDateTime.parse(a1.getTimestamp(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))))
                 .collect(Collectors.toList());
     }
 
