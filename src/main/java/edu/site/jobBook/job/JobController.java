@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,11 @@ import edu.site.jobBook.user.AppUser;
 import edu.site.jobBook.user.UserActivity;
 import edu.site.jobBook.user.UserActivityService;
 import edu.site.jobBook.user.UserRepository;
+
+// pagination imports
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @Controller
 @RequestMapping("/jobs")
@@ -41,14 +47,19 @@ public class JobController {
     }
 
     @GetMapping
-    public String getAllJobs(Model model) {
+    public String getAllJobs(Model model,@RequestParam(defaultValue = "0") int page) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser user = (AppUser) authentication.getPrincipal();
-        List<Job> jobs = jobService.getAllJobs();
+        
+        int pageSize = 5; // Number of jobs per page
+        Pageable pageable = PageRequest.of(page, pageSize);
+        
+        Page<Job> jobs = jobService.getAllJobs(pageable);
+
         model.addAttribute("jobs", jobs);
-        if (!jobs.isEmpty()) {
-            model.addAttribute("selectedJob", jobs.get(0));
-        }
+        // if (!jobs.isEmpty()) {
+        //     model.addAttribute("selectedJob", jobs.get(0));
+        // }
 
         // Log user activity for viewing the jobs page
         userActivityService.saveUserActivity(UserActivity.builder()
@@ -133,7 +144,7 @@ public class JobController {
     public String saveJob(@ModelAttribute Job job,  Model model,RedirectAttributes redirectAttributes,@RequestParam("companyId") Long companyId) {
         jobService.saveJob(job, companyId);
         redirectAttributes.addFlashAttribute("message", "Job created successfully!");
-        return "redirect:/jobsList";
+        return "redirect:/jobs";
     }
 
     @GetMapping("/edit/{id}")
@@ -148,7 +159,7 @@ public class JobController {
     public String updateJob(Job job, @RequestParam("companyId") Long companyId, Model model, RedirectAttributes redirectAttributes) {
         jobService.updateJob(job, companyId);
         redirectAttributes.addFlashAttribute("message", "Job updated " + job.getId() + " successfully!");
-        return "redirect:/jobsList";
+        return "redirect:/jobs";
     }
 
     @GetMapping("/details/{jobId}")
