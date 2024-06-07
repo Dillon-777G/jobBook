@@ -18,6 +18,9 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @Transactional
@@ -108,6 +111,23 @@ public class UserServiceTest {
         assertThat(createdUser).isNotNull();
         assertThat(createdUser.getUsername()).isEqualTo("newuser");
         assertThat(passwordEncoder.matches("password", createdUser.getPassword())).isTrue();
+    }
+
+    @Test
+    public void testCreateUserSession() {
+        // Given
+        AppUser user = AppUser.builder()
+                .id(1L)
+                .username("testuser")
+                .password("password")
+                .roles(Set.of("ROLE_USER"))
+                .build();
+
+        // When
+        userService.createUserSession(user);
+
+        // Then
+        verify(userSessionRepository, times(1)).saveUserSession(any(UserSession.class));
     }
 
     @Test

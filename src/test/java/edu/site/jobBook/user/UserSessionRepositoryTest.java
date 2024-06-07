@@ -95,7 +95,7 @@ public class UserSessionRepositoryTest {
 
         when(hashOperations.values(UserSessionRepository.KEY)).thenReturn(Arrays.asList(userSession1, userSession2));
 
-        List<Object> allUserSessions = userSessionRepository.getAllUserSessions();
+        List<UserSession> allUserSessions = userSessionRepository.getAllUserSessions();
 
         assertNotNull(allUserSessions);
         assertEquals(2, allUserSessions.size());

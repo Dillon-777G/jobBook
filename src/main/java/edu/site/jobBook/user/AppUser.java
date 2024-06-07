@@ -28,6 +28,7 @@ public class AppUser implements UserDetails {
 
     @NotEmpty(message = "Username is required")
     @Size(min = 3, message = "Username must be at least 3 characters")
+    @Column(unique = true)
     private String username;
 
     @NotEmpty(message = "Password is required")

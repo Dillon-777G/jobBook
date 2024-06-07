@@ -1,7 +1,10 @@
 package edu.site.jobBook.user;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +72,17 @@ public class UserService {
         return createdUser;
     }
 
+    public void createUserSession(AppUser user) {
+        UserSession userSession = UserSession.builder()
+                .sessionId(UUID.randomUUID().toString())
+                .userId(user.getId())
+                .username(user.getUsername())
+                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
+        logger.info("Creating user session for userId: {}", user.getId());
+        userSessionRepository.saveUserSession(userSession);
+    }
+
     public void deleteUserByUsername(String username) {
         logger.info("Deleting user by username: {}", username);
         if ("admin".equals(username)) {
@@ -115,5 +129,12 @@ public class UserService {
         logger.info("Deleting user session for sessionId: {}", sessionId);
         userSessionRepository.deleteUserSession(sessionId);
         logger.info("User session deleted successfully for sessionId: {}", sessionId);
+    }
+
+    public List<UserSession> getAllActiveSessions() {
+        logger.info("Retrieving all active user sessions");
+        List<UserSession> sessions = userSessionRepository.getAllUserSessions();
+        logger.info("Found {} active sessions", sessions.size());
+        return sessions;
     }
 }

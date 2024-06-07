@@ -89,6 +89,15 @@
                             </li>
                         </ul>
                     </div>
+
+                    <h3>Active User Sessions</h3>
+                    <div class="scroll-box mt-4">
+                        <ul>
+                            <li th:each="session : ${sessions}">
+                                <span th:text="'Session ID: ' + ${session.sessionId} + ', User ID: ' + ${session.userId} + ', Username: ' + ${session.username} + ', Created At: ' + ${session.createdAt}"></span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

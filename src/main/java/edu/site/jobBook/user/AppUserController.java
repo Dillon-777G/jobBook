@@ -37,14 +37,12 @@ public class AppUserController {
         model.addAttribute("username", user.getUsername());
         model.addAttribute("roles", user.getAuthorities());
 
-       
         UserActivity activity = UserActivity.builder()
                 .userId(user.getId())
                 .activity("Viewed profile")
                 .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();
         userActivityService.saveUserActivity(activity);
-
 
         List<UserActivity> activities = userActivityService.getUserActivities(user.getId());
         model.addAttribute("activities", activities);
@@ -157,9 +155,11 @@ public class AppUserController {
         List<AppUser> users = userService.findAllUsers();
         List<UserActivity> activities = userActivityService.getAllUserActivities();
         List<Company> companies = companyService.findAllCompanies();  // Get all companies
+        List<UserSession> sessions = userService.getAllActiveSessions();
         model.addAttribute("users", users);
         model.addAttribute("activities", activities);
         model.addAttribute("companies", companies);
+        model.addAttribute("sessions", sessions);
         return "admin";
     }
 }
