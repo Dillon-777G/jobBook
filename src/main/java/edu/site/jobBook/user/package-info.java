@@ -42,7 +42,7 @@
  * <li>Extends JpaRepository to provide CRUD operations for AppUser entities.</li>                          *
  * </ul>                                                                                                    *
  *                                                                                                          *
- * UserService:                                                                                             *
+ * UserService/UserSessionService:                                                                                             *
  * <ul>                                                                                                     *
  * <li>Handles user-related business logic, such as creating and deleting users.</li>                       *
  * <li>Integrates with PostRepository to handle user-related posts.</li>                                    *
