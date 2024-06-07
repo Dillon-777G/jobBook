@@ -2,7 +2,9 @@ package edu.site.jobBook.job;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import edu.site.jobBook.job.FileUpload.FileUploadService;
 import edu.site.jobBook.user.AppUser;
 
 import java.util.Date;
@@ -13,10 +15,12 @@ import java.util.stream.Collectors;
 public class JobApplicationService {
 
     private final JobApplicationRepository jobApplicationRepository;
+    private final FileUploadService fileUploadService;
 
     @Autowired
-    public JobApplicationService(JobApplicationRepository jobApplicationRepository) {
+    public JobApplicationService(JobApplicationRepository jobApplicationRepository, FileUploadService fileUploadService) {
         this.jobApplicationRepository = jobApplicationRepository;
+        this.fileUploadService = fileUploadService;
     }
 
     public List<JobApplication> getApplicationsByUser(AppUser user) {
@@ -27,22 +31,23 @@ public class JobApplicationService {
         return jobApplicationRepository.existsByUserAndJob(user, job);
     }
 
-    public boolean applyForJob(AppUser user, Job job) {
+    public boolean applyForJob(AppUser user, Job job, MultipartFile resume) {
         if (hasUserAppliedForJob(user, job)) {
             return false;
         }
 
-        try{
-        JobApplication application = new JobApplication();
-        application.setUser(user);
-        application.setJob(job);
-        application.setStatus(JobApplicationStatus.APPLIED);
-        application.setApplicationDate(new Date());
+        try {
+            JobApplication application = new JobApplication();
+            application.setUser(user);
+            application.setJob(job);
+            application.setStatus(JobApplicationStatus.APPLIED);
+            application.setApplicationDate(new Date());
 
-        jobApplicationRepository.save(application);
-        return true;
-        }
-        catch (Exception e){
+            JobApplication jobApplication = jobApplicationRepository.save(application);
+
+            fileUploadService.store(resume, jobApplication.getId());
+            return true;
+        } catch (Exception e) {
             return false;
         }
     }

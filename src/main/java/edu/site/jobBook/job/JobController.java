@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.site.jobBook.company.Company;
@@ -21,7 +21,6 @@ import edu.site.jobBook.user.AppUser;
 import edu.site.jobBook.user.UserActivity;
 import edu.site.jobBook.user.UserActivityService;
 import edu.site.jobBook.user.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 
 @Controller
 @RequestMapping("/jobs")
@@ -84,7 +83,7 @@ public class JobController {
         model.addAttribute("totalApplications", jobApplications.size());
         model.addAttribute("jobApplications", jobApplications);
 
-        return "myjobspage";
+        return "myjobs";
     }
 
     @GetMapping("/myjobs/filter/{filter}")
@@ -97,8 +96,9 @@ public class JobController {
     }
 
     @PostMapping("/apply")
-    public ResponseEntity<String> applyForJob(@RequestBody Map<String, Long> requestBody, Principal principal) {
-        Long jobId = requestBody.get("jobId");
+    public ResponseEntity<String> applyForJob(@RequestParam("jobId") Long jobId, 
+                                                @RequestParam("resume") MultipartFile resume,
+                                                Principal principal) {
         if (jobId == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid job ID");
         }
@@ -109,7 +109,7 @@ public class JobController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Job not found");
         }
 
-        boolean applied = jobApplicationService.applyForJob(user, job);
+        boolean applied = jobApplicationService.applyForJob(user, job, resume);
         if (applied) {
             return ResponseEntity.ok("Application submitted successfully!");
         } else {
@@ -133,7 +133,7 @@ public class JobController {
     public String saveJob(@ModelAttribute Job job,  Model model,RedirectAttributes redirectAttributes,@RequestParam("companyId") Long companyId) {
         jobService.saveJob(job, companyId);
         redirectAttributes.addFlashAttribute("message", "Job created successfully!");
-        return "redirect:/jobs";
+        return "redirect:/jobsList";
     }
 
     @GetMapping("/edit/{id}")
@@ -148,7 +148,7 @@ public class JobController {
     public String updateJob(Job job, @RequestParam("companyId") Long companyId, Model model, RedirectAttributes redirectAttributes) {
         jobService.updateJob(job, companyId);
         redirectAttributes.addFlashAttribute("message", "Job updated " + job.getId() + " successfully!");
-        return "redirect:/jobs";
+        return "redirect:/jobsList";
     }
 
     @GetMapping("/details/{jobId}")
