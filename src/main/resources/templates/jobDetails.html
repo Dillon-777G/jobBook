@@ -60,16 +60,12 @@
           <form id="applyForm">
             <div class="mb-3">
                 <label for="name" class="form-label">Your Name</label>
-                <input type="label" class="form-control" id="name" required>
+                <input type="label" class="form-control"  id="name" required>
               </div>
             <div class="mb-3">
-              <label for="email" class="form-label">Your Email</label>
-              <input type="email" class="form-control" id="email" required>
-            </div>
-            <div class="mb-3">
-                <label for="phone" class="form-label">Your Pone</label>
-                <input type="text" class="form-control" id="phone" required>
-              </div>
+                <label for="fileUpload" class="form-label">Resume</label>
+                <input type="file" class="form-control" id="fileUpload"  accept=".pdf,.doc,.docx" required>
+                </div>
               <input type="hidden" id="jobId" name="jobId">
           </form>
         </div>
@@ -105,17 +101,15 @@
     function submitApplication() {
         var csrf = getCsrfToken();
         var jobId = $('#jobId').val();
-        console.log('New');
-        console.log(jobId);
-        console.log(csrf.header);
-        console.log(csrf.token);
+        var formData = new FormData();
+        formData.append('jobId', jobId);
+        formData.append('resume', $('#fileUpload')[0].files[0]); // Get the uploaded file
         $.ajax({
             url: '/jobs/apply',
             method: 'POST',
-            contentType: 'application/json',
-                data: JSON.stringify({
-                    jobId: jobId
-                }),
+            contentType: false, // Important: Do not set contentType when using FormData
+            processData: false, // Important: Do not process data when using FormData
+            data: formData,
             beforeSend: function(xhr) {
                 xhr.setRequestHeader(csrf.header, csrf.token);
             },
@@ -124,12 +118,13 @@
                 $('#exampleModal').modal('hide');
                 $('#applyButton').prop('disabled', true).text('Applied').removeClass('btn-primary').addClass('btn-success');
             },
-            error: function() {
+            error: function(error) {
                 console.log(error.responseText);
                 alert('Error submitting application. Please try again.');
             }
         });
     }
+    
 </script>
 
 

@@ -38,7 +38,12 @@
                                         
                                         >Status</p>
                                         <p class="card-text" th:text="${#dates.format(jobApp.applicationDate, 'yyyy-MM-dd HH:mm:ss')}">Date Applied</p>
-                                        <a th:href="@{/jobs/{id}(id=${jobApp.job.id})}" class="btn btn-primary">View Job</a>
+                                        <a th:href="@{/download/{jobApplicationId}(jobApplicationId=${jobApp.id})}" class="btn btn-success">
+                                            Download File
+                                        </a>
+                                        <a th:href="@{/jobs/{id}(id=${jobApp.job.id})}" class="btn btn-primary">
+                                            View Job
+                                        </a>
                                     </div>
                                 </div>
                             </div>
