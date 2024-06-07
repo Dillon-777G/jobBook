@@ -25,6 +25,9 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserSessionRepository userSessionRepository;
+
     public AppUser save(AppUser user) {
         logger.info("Saving user with username: {}", user.getUsername());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -89,5 +92,28 @@ public class UserService {
             logger.warn("User not found with username: {}", username);
             throw new IllegalArgumentException("User not found");
         }
+    }
+
+    public void saveUserSession(UserSession userSession) {
+        logger.info("Saving user session for userId: {}", userSession.getUserId());
+        userSessionRepository.saveUserSession(userSession);
+        logger.info("User session saved successfully for sessionId: {}", userSession.getSessionId());
+    }
+
+    public UserSession getUserSession(String sessionId) {
+        logger.info("Retrieving user session for sessionId: {}", sessionId);
+        UserSession userSession = userSessionRepository.getUserSession(sessionId);
+        if (userSession == null) {
+            logger.warn("User session not found for sessionId: {}", sessionId);
+        } else {
+            logger.info("User session retrieved successfully for sessionId: {}", sessionId);
+        }
+        return userSession;
+    }
+
+    public void deleteUserSession(String sessionId) {
+        logger.info("Deleting user session for sessionId: {}", sessionId);
+        userSessionRepository.deleteUserSession(sessionId);
+        logger.info("User session deleted successfully for sessionId: {}", sessionId);
     }
 }

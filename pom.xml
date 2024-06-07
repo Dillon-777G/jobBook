@@ -33,6 +33,12 @@
 		</dependency>
 		<!--end  -->
 
+		<!-- Redis Template Serializer -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+		</dependency>
+
 		<!-- Spring Starter-->
 		<dependency>
         	<groupId>org.springframework.boot</groupId>
