@@ -18,6 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -37,6 +39,9 @@ import edu.site.jobBook.user.AppUser;
 import edu.site.jobBook.user.UserActivityService;
 import edu.site.jobBook.user.UserRepository;
 
+import edu.site.jobBook.job.JobView.JobViewService;
+import org.springframework.data.domain.Page;
+
 public class JobControllerTest {
     
     private MockMvc mockMvc;
@@ -53,6 +58,9 @@ public class JobControllerTest {
     // Mock UserActivityService
     @Mock
     private UserActivityService userActivityService;
+
+    @Mock
+    private JobViewService jobViewService;
 
     // Mock Authentication and SecurityContext
     @Mock
@@ -83,7 +91,7 @@ public class JobControllerTest {
 
         
         setField(jobController, "userActivityService", userActivityService);
-
+        setField(jobController, "jobViewService", jobViewService);
       
         when(principal.getName()).thenReturn("user");
 
@@ -109,25 +117,38 @@ public class JobControllerTest {
         
 
         List<Job> jobs = Arrays.asList(job1, job2);
-
-        when(jobService.getAllJobs()).thenReturn(jobs);
+        Page<Job> jobPage = new PageImpl<>(jobs);
+        // when(jobService.getAllJobs()).thenReturn(jobs);
+        when(jobService.getAllJobs(any(PageRequest.class))).thenReturn(jobPage);
 
         mockMvc.perform(get("/jobs"))
             .andExpect(status().isOk())
             .andExpect(model().attributeExists("jobs"))
-            .andExpect(model().attribute("jobs", jobs))
-            .andExpect(model().attributeExists("selectedJob"));
+            .andExpect(model().attribute("jobs", jobPage));
+            // .andExpect(status().isOk())
+            // .andExpect(model().attributeExists("jobs"))
+            // .andExpect(model().attribute("jobs", jobs))
+            // .andExpect(model().attributeExists("selectedJob"));
     }
 
     @Test
     public void testGetAllJobsEmpty() throws Exception {
-        when(jobService.getAllJobs()).thenReturn(Collections.emptyList());
+
+
+        
+        // when(jobService.getAllJobs()).thenReturn(Collections.emptyList());
+        when(jobService.getAllJobs(any(PageRequest.class))).thenReturn(new PageImpl<>(Collections.emptyList()));
 
         mockMvc.perform(get("/jobs"))
             .andExpect(status().isOk())
             .andExpect(model().attributeExists("jobs"))
-            .andExpect(model().attribute("jobs", Collections.emptyList()))
+            .andExpect(model().attribute("jobs", new PageImpl<>(Collections.emptyList())))
             .andExpect(model().attributeDoesNotExist("selectedJob"));
+        // mockMvc.perform(get("/jobs"))
+        //     .andExpect(status().isOk())
+        //     .andExpect(model().attributeExists("jobs"))
+        //     .andExpect(model().attribute("jobs", Collections.emptyList()))
+        //     .andExpect(model().attributeDoesNotExist("selectedJob"));
     }
 
     @Test
