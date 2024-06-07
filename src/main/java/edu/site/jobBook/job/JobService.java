@@ -178,7 +178,9 @@ public class JobService {
         }
     }
 
-
+    public Long getJobCountByStatus(JobStatus status) {
+        return jobRepository.countByJobDetailsStatus(status);
+    }
 
     
 }

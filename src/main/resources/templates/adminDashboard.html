@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layoutAdmin">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+</head>
+<body>
+    <!-- Specific content for the home page -->
+    <div layout:fragment="content">
+        <div class="container-fluid">
+            <!-- Navigation Bar -->
+            
+            <!-- Page Content -->
+            <div class="row mt-3">
+                <!-- Sidebar -->
+                <div class="col-lg-3">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action">Dashboard</a>
+                        <a href="#" class="list-group-item list-group-item-action">Jobs</a>
+                        <a href="#" class="list-group-item list-group-item-action">Users</a>
+                        <a href="#" class="list-group-item list-group-item-action">Companies</a>
+                        <a href="#" class="list-group-item list-group-item-action">Reports</a>
+                        <a href="#" class="list-group-item list-group-item-action">Settings</a>
+                    </div>
+                </div>
+                <!-- Main Content -->
+                <div class="col-lg-9">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <h2>Welcome, Admin!</h2>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <div class="card  bg-success">
+                                <div class="card-body">
+                                    <h5 class="card-title">Company Count</h5>
+                                    <p class="card-text"><strong th:text="${totalCompanyCount}"></strong></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card  bg-primary">
+                                <div class="card-body">
+                                    <h5 class="card-title">Job Count</h5>
+                                    <p class="card-text"><strong th:text="${totalJobCount}"></strong></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-danger">
+                                <div class="card-body">
+                                    <h5 class="card-title">Post Count</h5>
+                                    <p class="card-text"><strong th:text="${totalPostCount}"></strong></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body bg-warning">
+                                    <h5 class="card-title">User Count</h5>
+                                    <p class="card-text"><strong th:text="${totalUserCount}"></strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-10">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Job Applications</h5>
+                                    <!-- Placeholder for chart -->
+                                    <canvas id="jobPieChart" width="400" height="400"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Job View Counts</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Job ID</th>
+                                                    <th>Job Title</th>
+                                                    <th>View Count</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="jobViews : ${jobViewsPage}">
+                                                    <td th:text="${jobViews.jobId}">Job ID</td>
+                                                    <td th:text="${jobViews.jobTitle}">Job Title</td>
+                                                    <td th:text="${jobViews.viewCount}">View Count</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <ul class="pagination">
+                                            <li th:if="${jobViewsPage.hasPrevious()}" class="page-item">
+                                                <a class="page-link" th:href="@{/admin/dashboard/jobs(page=${jobViewsPage.previousPageable().pageNumber})}">&laquo; Previous</a>
+                                            </li>
+                                            <li th:each="i : ${#numbers.sequence(0, jobViewsPage.totalPages - 1)}" class="page-item">
+                                                <a class="page-link" th:href="@{/admin/dashboard/jobs(page=${i})}" th:text="${i + 1}"></a>
+                                            </li>
+                                            <li th:if="${jobViewsPage.hasNext()}" class="page-item">
+                                                <a class="page-link" th:href="@{/admin/dashboard/jobs(page=${jobViewsPage.nextPageable().pageNumber})}">Next &raquo;</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Notifications</h5>
+                                    <!-- Placeholder for notifications -->
+                                    <div class="alert alert-info" role="alert">
+                                        No new notifications.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var jobCountByStatus = /*[[${jobCountByStatus}]]*/ {};
+            
+            var labels = Object.keys(jobCountByStatus);
+            var data = Object.values(jobCountByStatus);
+            var backgroundColor = [
+                'rgba(54, 162, 235, 0.6)', // Blue for ACTIVE
+                'rgba(255, 99, 132, 0.6)', // Red for EXPIRED
+                'rgba(255, 206, 86, 0.6)', // Yellow for CLOSED
+                'rgba(75, 192, 192, 0.6)' // Green for ON_HOLD
+            ];
+        
+            var ctx = document.getElementById('jobPieChart').getContext('2d');
+            var jobPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColor
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Job Count by Status'
+                    }
+                }
+            });
+            /*]]>*/
+        </script>
+  </div>
+</body>
+</html>

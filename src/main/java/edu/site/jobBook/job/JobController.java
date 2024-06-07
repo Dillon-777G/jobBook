@@ -18,10 +18,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.site.jobBook.company.Company;
+import edu.site.jobBook.job.JobView.JobViewService;
 import edu.site.jobBook.user.AppUser;
 import edu.site.jobBook.user.UserActivity;
 import edu.site.jobBook.user.UserActivityService;
 import edu.site.jobBook.user.UserRepository;
+import groovyjarjarantlr4.v4.parse.ANTLRParser.prequelConstruct_return;
 
 // pagination imports
 import org.springframework.data.domain.Page;
@@ -36,14 +38,17 @@ public class JobController {
     private final JobApplicationService jobApplicationService;
     private final UserRepository userRepository;
     private final UserActivityService userActivityService;
+    private final JobViewService jobViewService;
 
     @Autowired
     public JobController(JobService jobService, JobApplicationService jobApplicationService,
-                         UserRepository userRepository, UserActivityService userActivityService) {
+                         UserRepository userRepository, UserActivityService userActivityService,
+                         JobViewService jobViewService) {
         this.jobService = jobService;
         this.jobApplicationService = jobApplicationService;
         this.userRepository = userRepository;
         this.userActivityService = userActivityService;
+        this.jobViewService = jobViewService;
     }
 
     @GetMapping
@@ -79,6 +84,11 @@ public class JobController {
         boolean jobAlreadyApplied = jobApplicationService.hasUserAppliedForJob(user, job);
         model.addAttribute("job", job);
         model.addAttribute("jobAlreadyApplied", jobAlreadyApplied);
+        
+        // Store the job view count in the database
+        jobViewService.incrementJobViewCount(id.toString(), job.getTitle());
+        long jobViewCount = jobViewService.getJobViewCount(id.toString(),job.getTitle());
+        model.addAttribute("jobViewCount", jobViewCount);
         return "jobDetails";
     }
 
@@ -164,11 +174,14 @@ public class JobController {
 
     @GetMapping("/details/{jobId}")
     public String getJobFullDetails(@PathVariable Long jobId, Model model) {
+        
         // Fetch job details from the database based on the provided job ID
         Job job = jobService.getJobById(jobId);
 
         // Add the fetched job details to the model to be displayed in the view
         model.addAttribute("job", job);
+
+        jobViewService.incrementJobViewCount(jobId.toString(),job.getTitle());
 
         // Return the name of the Thymeleaf template to be rendered
         return "jobDetailsRightPanel";
