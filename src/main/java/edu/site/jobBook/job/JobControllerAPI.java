@@ -1,36 +1,14 @@
 package edu.site.jobBook.job;
 
-import java.security.Principal;
 import java.util.List;
-import java.util.Map;
-
-import javax.print.attribute.standard.PrinterInfo;
-
-import org.apache.catalina.authenticator.SpnegoAuthenticator.AuthenticateAction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import edu.site.jobBook.company.Company;
-import edu.site.jobBook.user.AppUser;
 import edu.site.jobBook.user.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 
-import org.springframework.ui.Model;
-
-
-//trouble shooting
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-
-
+@RestController
 @Controller
 @RequestMapping("/api/jobs")
 public class JobControllerAPI {

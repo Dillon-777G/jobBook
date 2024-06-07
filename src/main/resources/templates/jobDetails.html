@@ -11,71 +11,100 @@
 <body>
     <div layout:fragment="content">
         <div class="container mt-5">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5>
-                        <a th:href="@{/company/{id}(id=${job.company.id})}" th:text="${job.company.name}" class="text-primary company-link">Company Name</a>
-                    </h5>
-                    <h3 th:text="${job.title}">Job Title</h3>
-                    <p><strong>Location: </strong><span th:text="${job.jobDetails.location}">Location</span></p>
-                    <p><strong>Skills: </strong><span th:text="${job.jobDescription.skills}">Skills</span></p>
-                    <button type="button" class="btn btn-primary" id="applyButton"
-                        th:if="${!jobAlreadyApplied}"  
-                        th:attr="data-job-id=${job.id}"       
-                        data-bs-toggle="modal" data-bs-target="#exampleModal">Apply</button>
-                    <button type="button" class="btn btn-success" disabled="disabled"
-                        th:if="${jobAlreadyApplied}">Applied</button> 
-
+            <div class="row">
+                <!-- Job Details Section -->
+                <div class="col-md-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <!-- Company Information -->
+                            <h5>
+                                <a th:href="@{/company/{id}(id=${job.company.id})}" th:text="${job.company.name}" class="text-primary company-link">Company Name</a>
+                            </h5>
+                            <h3 class="card-title mb-4" th:text="${job.title}">Job Title</h3>
+                <p class="text-muted mb-2"><i class="bi bi-eye-fill"></i> <strong>Views: </strong><span th:text="${jobViewCount}">0</span></p>
+                <p class="mb-2"><i class="bi bi-geo-alt-fill"></i> <strong>Location: </strong><span th:text="${job.jobDetails.location}">Location</span></p>
+                <p class="mb-2"><i class="bi bi-briefcase-fill"></i> <strong>Skills: </strong><span th:text="${job.jobDescription.skills}">Skills</span></p>
+                            <!-- Apply Button -->
+                            <button type="button" class="btn btn-primary me-2" id="applyButton"
+                                th:if="${!jobAlreadyApplied}"  
+                                th:attr="data-job-id=${job.id}"       
+                                data-bs-toggle="modal" data-bs-target="#exampleModal">Apply</button>
+                            <button type="button" class="btn btn-success" disabled="disabled" th:if="${jobAlreadyApplied}">Applied</button>
+                        </div>
+                    </div>
+                    <!-- About the Job Section -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h3>About the Job</h3>
+                            <p><strong>Overview: </strong><span th:text="${job.jobDescription.overview}">Overview</span></p>
+                            <p><strong>Responsibilities: </strong><span th:text="${job.jobDescription.responsibilities}">Responsibilities</span></p>
+                            <p><strong>Qualifications: </strong><span th:text="${job.jobDescription.qualification}">Qualifications</span></p>
+                            <p><strong>Benefits: </strong><span th:text="${job.jobDescription.benefits}">Benefits</span></p>
+                        </div>
+                    </div>
+                    <!-- About the Company Section -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h4>About the Company</h4>
+                            <h5>
+                                <a th:href="@{/company/{id}(id=${job.company.id})}" th:text="${job.company.name}" class="text-primary company-link">Company Name</a>
+                            </h5>
+                            <p th:text="${job.company.description}">Company Description</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <nav>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <a href="/jobs" class="list-group-item-action text-decoration-none text-dark fw-bold">Back to Jobs</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a href="/jobs/myjobs" class="list-group-item-action text-decoration-none text-dark fw-bold">My Jobs</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a href="/profile" class="list-group-item-action text-decoration-none text-dark fw-bold">Profile</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Apply for Job</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="applyForm">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Your Name</label>
+                                <input type="text" class="form-control" id="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="fileUpload" class="form-label">Resume</label>
+                                <input type="file" class="form-control" id="fileUpload" accept=".pdf,.doc,.docx" required>
+                            </div>
+                            <input type="hidden" id="jobId" name="jobId">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="submitApplication()">Submit</button>
+                    </div>
                 </div>
             </div>
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h3>About the Job</h3>
-                    <p><strong>Overview: </strong><span th:text="${job.jobDescription.overview}">Overview</span></p>
-                    <p><strong>Responsibilities: </strong><span th:text="${job.jobDescription.responsibilities}">Responsibilities</span></p>
-                    <p><strong>Qualifications: </strong><span th:text="${job.jobDescription.qualification}">Qualifications</span></p>
-                    <p><strong>Benefits: </strong><span th:text="${job.jobDescription.benefits}">Benefits</span></p>
-                </div>
-            </div>
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4>About the Company</h4>
-                    <h5>
-                        <a th:href="@{/company/{id}(id=${job.company.id})}" th:text="${job.company.name}" class="text-primary company-link">Company Name</a>
-                    </h5>
-                    <p th:text="${job.company.description}">Company Description</p>
-                </div>
-            </div>
         </div>
-
- <!-- Modal -->
- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Apply for Job</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="applyForm">
-            <div class="mb-3">
-                <label for="name" class="form-label">Your Name</label>
-                <input type="label" class="form-control"  id="name" required>
-              </div>
-            <div class="mb-3">
-                <label for="fileUpload" class="form-label">Resume</label>
-                <input type="file" class="form-control" id="fileUpload"  accept=".pdf,.doc,.docx" required>
-                </div>
-              <input type="hidden" id="jobId" name="jobId">
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="submitApplication()">Submit</button>
-        </div>
-      </div>
-    </div>
-  </div>
+        
         
   <script>
     function getCsrfToken() {

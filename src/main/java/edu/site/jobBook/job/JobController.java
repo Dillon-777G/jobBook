@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,10 +18,17 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.site.jobBook.company.Company;
+import edu.site.jobBook.job.JobView.JobViewService;
 import edu.site.jobBook.user.AppUser;
 import edu.site.jobBook.user.UserActivity;
 import edu.site.jobBook.user.UserActivityService;
 import edu.site.jobBook.user.UserRepository;
+import groovyjarjarantlr4.v4.parse.ANTLRParser.prequelConstruct_return;
+
+// pagination imports
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @Controller
 @RequestMapping("/jobs")
@@ -30,25 +38,33 @@ public class JobController {
     private final JobApplicationService jobApplicationService;
     private final UserRepository userRepository;
     private final UserActivityService userActivityService;
+    private final JobViewService jobViewService;
 
     @Autowired
     public JobController(JobService jobService, JobApplicationService jobApplicationService,
-                         UserRepository userRepository, UserActivityService userActivityService) {
+                         UserRepository userRepository, UserActivityService userActivityService,
+                         JobViewService jobViewService) {
         this.jobService = jobService;
         this.jobApplicationService = jobApplicationService;
         this.userRepository = userRepository;
         this.userActivityService = userActivityService;
+        this.jobViewService = jobViewService;
     }
 
     @GetMapping
-    public String getAllJobs(Model model) {
+    public String getAllJobs(Model model,@RequestParam(defaultValue = "0") int page) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser user = (AppUser) authentication.getPrincipal();
-        List<Job> jobs = jobService.getAllJobs();
+        
+        int pageSize = 5; // Number of jobs per page
+        Pageable pageable = PageRequest.of(page, pageSize);
+        
+        Page<Job> jobs = jobService.getAllJobs(pageable);
+
         model.addAttribute("jobs", jobs);
-        if (!jobs.isEmpty()) {
-            model.addAttribute("selectedJob", jobs.get(0));
-        }
+        // if (!jobs.isEmpty()) {
+        //     model.addAttribute("selectedJob", jobs.get(0));
+        // }
 
         // Log user activity for viewing the jobs page
         userActivityService.saveUserActivity(UserActivity.builder()
@@ -68,6 +84,11 @@ public class JobController {
         boolean jobAlreadyApplied = jobApplicationService.hasUserAppliedForJob(user, job);
         model.addAttribute("job", job);
         model.addAttribute("jobAlreadyApplied", jobAlreadyApplied);
+        
+        // Store the job view count in the database
+        jobViewService.incrementJobViewCount(id.toString(), job.getTitle());
+        long jobViewCount = jobViewService.getJobViewCount(id.toString(),job.getTitle());
+        model.addAttribute("jobViewCount", jobViewCount);
         return "jobDetails";
     }
 
@@ -83,7 +104,7 @@ public class JobController {
         model.addAttribute("totalApplications", jobApplications.size());
         model.addAttribute("jobApplications", jobApplications);
 
-        return "myjobs";
+        return "myJobsPage";
     }
 
     @GetMapping("/myjobs/filter/{filter}")
@@ -133,7 +154,7 @@ public class JobController {
     public String saveJob(@ModelAttribute Job job,  Model model,RedirectAttributes redirectAttributes,@RequestParam("companyId") Long companyId) {
         jobService.saveJob(job, companyId);
         redirectAttributes.addFlashAttribute("message", "Job created successfully!");
-        return "redirect:/jobsList";
+        return "redirect:/jobs";
     }
 
     @GetMapping("/edit/{id}")
@@ -148,16 +169,19 @@ public class JobController {
     public String updateJob(Job job, @RequestParam("companyId") Long companyId, Model model, RedirectAttributes redirectAttributes) {
         jobService.updateJob(job, companyId);
         redirectAttributes.addFlashAttribute("message", "Job updated " + job.getId() + " successfully!");
-        return "redirect:/jobsList";
+        return "redirect:/jobs";
     }
 
     @GetMapping("/details/{jobId}")
     public String getJobFullDetails(@PathVariable Long jobId, Model model) {
+        
         // Fetch job details from the database based on the provided job ID
         Job job = jobService.getJobById(jobId);
 
         // Add the fetched job details to the model to be displayed in the view
         model.addAttribute("job", job);
+
+        jobViewService.incrementJobViewCount(jobId.toString(),job.getTitle());
 
         // Return the name of the Thymeleaf template to be rendered
         return "jobDetailsRightPanel";
