@@ -104,7 +104,7 @@ public class JobController {
         model.addAttribute("totalApplications", jobApplications.size());
         model.addAttribute("jobApplications", jobApplications);
 
-        return "myjobs";
+        return "myJobsPage";
     }
 
     @GetMapping("/myjobs/filter/{filter}")
