@@ -61,8 +61,3 @@ VALUES
     (12, '2022-02-01', '2022-02-10', '2022-02-28', 'Orlando', 'ACTIVE'),
     (13, '2022-02-01', '2022-02-11', '2022-02-28', 'Las Vegas', 'ACTIVE');
 
--- Insert into JOB_APPLICATION table
-INSERT INTO JOB_APPLICATION (job_id, user_id, application_date, status)
-VALUES
-    (1, 1, '2022-01-02', 'APPLIED'),
-    (2, 1, '2022-01-03', 'APPLIED'),
