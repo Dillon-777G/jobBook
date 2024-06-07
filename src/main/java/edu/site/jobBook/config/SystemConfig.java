@@ -21,7 +21,7 @@ public class SystemConfig {
     public AppUser getDefaultUser1() {
         AppUser user = AppUser.builder()
                 .username("default1")
-                .password("password")  // Note: Ensure this password is encoded
+                .password("password") 
                 .roles(Set.of("ROLE_USER"))
                 .build();
         return userService.save(user);
@@ -32,7 +32,7 @@ public class SystemConfig {
     public AppUser getDefaultUser2() {
         AppUser user = AppUser.builder()
                 .username("default2")
-                .password("password")  // Note: Ensure this password is encoded
+                .password("password")  
                 .roles(Set.of("ROLE_USER"))
                 .build();
         return userService.save(user);
