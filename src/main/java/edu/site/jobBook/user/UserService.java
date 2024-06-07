@@ -1,11 +1,7 @@
 package edu.site.jobBook.user;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +23,6 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UserSessionRepository userSessionRepository;
 
     public AppUser save(AppUser user) {
         logger.info("Saving user with username: {}", user.getUsername());
@@ -72,16 +65,7 @@ public class UserService {
         return createdUser;
     }
 
-    public void createUserSession(AppUser user) {
-        UserSession userSession = UserSession.builder()
-                .sessionId(UUID.randomUUID().toString())
-                .userId(user.getId())
-                .username(user.getUsername())
-                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
-        logger.info("Creating user session for userId: {}", user.getId());
-        userSessionRepository.saveUserSession(userSession);
-    }
+    
 
     public void deleteUserByUsername(String username) {
         logger.info("Deleting user by username: {}", username);
@@ -106,35 +90,5 @@ public class UserService {
             logger.warn("User not found with username: {}", username);
             throw new IllegalArgumentException("User not found");
         }
-    }
-
-    public void saveUserSession(UserSession userSession) {
-        logger.info("Saving user session for userId: {}", userSession.getUserId());
-        userSessionRepository.saveUserSession(userSession);
-        logger.info("User session saved successfully for sessionId: {}", userSession.getSessionId());
-    }
-
-    public UserSession getUserSession(String sessionId) {
-        logger.info("Retrieving user session for sessionId: {}", sessionId);
-        UserSession userSession = userSessionRepository.getUserSession(sessionId);
-        if (userSession == null) {
-            logger.warn("User session not found for sessionId: {}", sessionId);
-        } else {
-            logger.info("User session retrieved successfully for sessionId: {}", sessionId);
-        }
-        return userSession;
-    }
-
-    public void deleteUserSession(String sessionId) {
-        logger.info("Deleting user session for sessionId: {}", sessionId);
-        userSessionRepository.deleteUserSession(sessionId);
-        logger.info("User session deleted successfully for sessionId: {}", sessionId);
-    }
-
-    public List<UserSession> getAllActiveSessions() {
-        logger.info("Retrieving all active user sessions");
-        List<UserSession> sessions = userSessionRepository.getAllUserSessions();
-        logger.info("Found {} active sessions", sessions.size());
-        return sessions;
     }
 }

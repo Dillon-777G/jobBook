@@ -12,9 +12,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserSession implements Serializable {
-    private static final long serialVersionUID = 1L; // Add this line to define a serialVersionUID
+    private static final long serialVersionUID = 1L; 
     private String sessionId;
     private Long userId;
     private String username;
     private String createdAt;
+    private boolean active;
 }

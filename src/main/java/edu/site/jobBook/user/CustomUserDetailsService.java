@@ -13,7 +13,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
-    private UserService userService;
+    private UserSessionService userSessionService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-        userService.createUserSession(user);
+        userSessionService.createUserSession(user);
         return user;
     }
 }

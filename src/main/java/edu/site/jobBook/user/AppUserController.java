@@ -27,6 +27,9 @@ public class AppUserController {
     private UserService userService;
 
     @Autowired
+    private UserSessionService userSessionService;
+
+    @Autowired
     private CompanyService companyService;
 
     @GetMapping("/profile")
@@ -155,11 +158,11 @@ public class AppUserController {
         List<AppUser> users = userService.findAllUsers();
         List<UserActivity> activities = userActivityService.getAllUserActivities();
         List<Company> companies = companyService.findAllCompanies();  // Get all companies
-        List<UserSession> sessions = userService.getAllActiveSessions();
+        List<UserSession> userSessions = userSessionService.getAllActiveSessions();
         model.addAttribute("users", users);
         model.addAttribute("activities", activities);
         model.addAttribute("companies", companies);
-        model.addAttribute("sessions", sessions);
+        model.addAttribute("userSessions", userSessions);
         return "admin";
     }
 }

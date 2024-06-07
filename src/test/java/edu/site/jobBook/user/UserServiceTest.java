@@ -11,16 +11,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @Transactional
@@ -40,14 +36,10 @@ public class UserServiceTest {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserSessionRepository userSessionRepository;
-
     @BeforeEach
     public void setUp() {
         userRepository.deleteAll();
         postRepository.deleteAll();
-        // Assuming user sessions are cleared after each test
     }
 
     @Test
@@ -114,23 +106,6 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testCreateUserSession() {
-        // Given
-        AppUser user = AppUser.builder()
-                .id(1L)
-                .username("testuser")
-                .password("password")
-                .roles(Set.of("ROLE_USER"))
-                .build();
-
-        // When
-        userService.createUserSession(user);
-
-        // Then
-        verify(userSessionRepository, times(1)).saveUserSession(any(UserSession.class));
-    }
-
-    @Test
     public void testCreateUserThrowsExceptionWhenUsernameExists() {
         AppUser existingUser = AppUser.builder()
                 .username("existinguser")
@@ -174,68 +149,21 @@ public class UserServiceTest {
 
     @Test
     public void testDeleteUserByUsernameThrowsExceptionWhenAdmin() {
-        AppUser admin = AppUser.builder()
-                .username("admin")
-                .password(passwordEncoder.encode("admin"))
-                .roles(Set.of("ROLE_ADMIN"))
-                .build();
+        // Ensure admin is present
+        AppUser admin = userRepository.findByUsername("admin");
+        if (admin == null) {
+            admin = AppUser.builder()
+                    .username("admin")
+                    .password(passwordEncoder.encode("admin"))
+                    .roles(new HashSet<>(Set.of("ROLE_ADMIN")))
+                    .build();
+            userRepository.save(admin);
+        }
 
-        userRepository.save(admin);
-
+        // Attempt to delete the admin user and verify that an exception is thrown
         assertThatThrownBy(() -> userService.deleteUserByUsername("admin"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Cannot delete admin user");
     }
 
-    @Test
-    public void testSaveUserSession() {
-        UserSession userSession = UserSession.builder()
-                .sessionId("session123")
-                .userId(1L)
-                .username("testuser")
-                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
-
-        userService.saveUserSession(userSession);
-
-        UserSession retrievedSession = userService.getUserSession("session123");
-
-        assertThat(retrievedSession).isNotNull();
-        assertThat(retrievedSession.getUsername()).isEqualTo("testuser");
-    }
-
-    @Test
-    public void testGetUserSession() {
-        UserSession userSession = UserSession.builder()
-                .sessionId("session123")
-                .userId(1L)
-                .username("testuser")
-                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
-
-        userSessionRepository.saveUserSession(userSession);
-
-        UserSession retrievedSession = userService.getUserSession("session123");
-
-        assertThat(retrievedSession).isNotNull();
-        assertThat(retrievedSession.getUsername()).isEqualTo("testuser");
-    }
-
-    @Test
-    public void testDeleteUserSession() {
-        UserSession userSession = UserSession.builder()
-                .sessionId("session123")
-                .userId(1L)
-                .username("testuser")
-                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
-
-        userSessionRepository.saveUserSession(userSession);
-
-        userService.deleteUserSession("session123");
-
-        UserSession retrievedSession = userService.getUserSession("session123");
-
-        assertThat(retrievedSession).isNull();
-    }
 }

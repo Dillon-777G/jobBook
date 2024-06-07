@@ -5,10 +5,11 @@
  *********************************************************************************
  * Main classes and their responsibilities:                                      *
  *                                                                               *
- * CustomAuthenticationSuccessHandler:                                           *
+ * CustomAuthenticationSuccessHandler/CustomLogout:                              *
  * <ul>                                                                          *
  * <li>Handles redirection based on user roles after successful authentication.  *
  * <li>Redirects admin users to the admin page and other users to the home page. *
+ * <li> Upon logout, userSession active status is set to false                   *
  * </ul>                                                                         *
  *                                                                               *
  * RedisConfig:                                                                  *
@@ -23,6 +24,7 @@
  * <li>Defines security filter chain, user details service, password encoder,    *
  * and authentication provider.</li>                                             *
  * <li>Disables CSRF for H2 console and frame options for H2 console.</li>       *
+ * <li>Implements custom logic for login and logout success handlers</li>        *
  * </ul>                                                                         *
  *                                                                               *
  * SystemConfig:                                                                 *
@@ -42,8 +44,8 @@
  * @Builder, etc.                                                                *
  * </ul>                                                                         *
  *                                                                               *
- * Authors: Dillon, Alex                                                                *
- *********************************************************************************/
+ * Authors: Dillon, Alex                                                         *
+ ********************************************************************************/
 
 
 package edu.site.jobBook.config;
