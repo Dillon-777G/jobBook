@@ -47,6 +47,18 @@
  * <li>Handles user-related business logic, such as creating and deleting users.</li>                       *
  * <li>Integrates with PostRepository to handle user-related posts.</li>                                    *
  * <li>Uses PasswordEncoder to encode passwords.</li>                                                       *
+ * <li>Manages user sessions through UserSessionRepository.</li>                                            *
+ * </ul>                                                                                                    *
+ *                                                                                                          *
+ * UserSession:                                                                                             *
+ * <ul>                                                                                                     *
+ * <li>Represents a user's session with fields such as sessionId, userId, username, and createdAt.</li>     *
+ * <li>Implements Serializable for Redis storage.</li>                                                      *
+ * </ul>                                                                                                    *
+ *                                                                                                          *
+ * UserSessionRepository:                                                                                   *
+ * <ul>                                                                                                     *
+ * <li>Handles the saving, retrieval, and deletion of user sessions using Redis.</li>                       *
  * </ul>                                                                                                    *
  *                                                                                                          *
  * Annotations and Frameworks used:                                                                         *
@@ -56,7 +68,7 @@
  * <li>Spring Security: For handling user authentication and authorization.</li>                            *
  * <li>Spring MVC: For handling HTTP requests and responses.</li>                                           *
  * <li>Spring Data JPA: For data access and repository management.</li>                                     *
- * <li>Redis: For caching and storing user activities.</li>                                                 *
+ * <li>Redis: For caching and storing user activities and sessions.</li>                                    *
  * </ul>                                                                                                    *
  *                                                                                                          *
  * Author: Dillon                                                                                           *
