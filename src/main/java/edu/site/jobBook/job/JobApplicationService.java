@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import edu.site.jobBook.job.FileUpload.FileUploadService;
 import edu.site.jobBook.user.AppUser;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,4 +75,10 @@ public class JobApplicationService {
                 return allApplications;
         }
     }
+
+    public List<Object[]> countJobApplicationsByJobId() {
+        return jobApplicationRepository.countJobApplicationsByJobId();
+    }
+
+
 }

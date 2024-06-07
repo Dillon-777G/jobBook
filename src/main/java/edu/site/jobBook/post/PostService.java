@@ -22,6 +22,10 @@ public class PostService {
         this.userRepository = userRepository;
     }
 
+    public List<Post> fetchAllPosts() {
+        return postRepository.findAll();
+    }
+
     public List<Post> fetchAllUsersPost(AppUser user) {
         return postRepository.findByUser(user);
     }

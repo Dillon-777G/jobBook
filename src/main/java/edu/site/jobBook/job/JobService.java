@@ -13,6 +13,9 @@ import edu.site.jobBook.company.CompanyRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @Service
 public class JobService {
 
@@ -27,6 +30,15 @@ public class JobService {
         this.companyRepository = companyRepository;
     }
 
+    public Page<Job> getAllJobs(Pageable pageable) {
+        try {
+            return jobRepository.findAll(pageable);
+        } catch (Exception e) {
+            logger.error("Error retrieving all jobs", e);
+            throw new RuntimeException("Error retrieving all jobs", e);
+        }
+    }
+    
     public List<Job> getAllJobs() {
         try {
             return jobRepository.findAll();
@@ -166,7 +178,9 @@ public class JobService {
         }
     }
 
-
+    public Long getJobCountByStatus(JobStatus status) {
+        return jobRepository.countByJobDetailsStatus(status);
+    }
 
     
 }

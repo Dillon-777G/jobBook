@@ -9,29 +9,58 @@
 <body>
     <!-- Specific content for the home page -->
     <div layout:fragment="content">
-    <div class="container-fluid pb-3">
-      <div class="d-grid gap-3" style="grid-template-columns: 1fr 2fr;">
-        <div class="bg-body-tertiary border rounded-3">
-            <div th:if="${message}" class="alert alert-success" role="alert">
-                <span th:text="${message}"></span>
+        <div class="container-fluid pb-3">
+            <div class="row">
+                <!-- Left Panel -->
+                <div class="col-md-4">
+                    <div class="card border-0 rounded shadow-sm">
+                        <div class="card-body">
+                            <!-- Alert Message -->
+                            <div th:if="${message}" class="alert alert-success" role="alert">
+                                <span th:text="${message}"></span>
+                            </div>
+                            <!-- Job Listings -->
+                            <h4 class="card-title mb-4">Job Listings</h4>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" th:each="job : ${jobs}">
+                                    <a href="#" th:attr="onclick='displayJobDetails(' + ${job.id} + ')'" class="d-block job-link" th:data-id="${job.id}">
+                                        <h5 class="mb-1" th:text="${job.title}">Job Title</h5>
+                                        <p class="mb-1 text-muted" th:text="${job.company.name}">Company Name</p>
+                                        <small class="text-muted" th:text="${job.jobDetails.location}">Location</small><br>
+                                        <small class="text-muted" th:text="${job.jobDetails.postedDate}">Posted Date</small>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- Pagination -->
+                            <nav aria-label="Job pagination" class="mt-3">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item" th:classappend="${!jobs.hasPrevious()} ? 'disabled'">
+                                        <a class="page-link" th:href="${jobs.hasPrevious()} ? @{'/jobs?page=' + ${jobs.number - 1}} : '#'" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item" th:each="page : ${#numbers.sequence(0, jobs.totalPages - 1)}" th:classappend="${page == jobs.number} ? 'active'">
+                                        <a class="page-link" th:href="@{'/jobs?page=' + ${page}}" th:text="${page + 1}">1</a>
+                                    </li>
+                                    <li class="page-item" th:classappend="${!jobs.hasNext()} ? 'disabled'">
+                                        <a class="page-link" th:href="${jobs.hasNext()} ? @{'/jobs?page=' + ${jobs.number + 1}} : '#'" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Right Panel -->
+                <div class="col-md-8">
+                    <div class="card border-0 rounded shadow-sm" id="right-panel">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
             </div>
-            <h4 class="p-3">Job Listings</h4>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item" th:each="job : ${jobs}">
-                    <a href="#" th:attr="onclick='displayJobDetails(' + ${job.id} + ')'" class="d-block job-link" th:data-id="${job.id}">
-                        
-                        <h5 th:text="${job.title}">Job Title</h5>
-                        <p class="mb-1" th:text="${job.company.name}">Company Name</p>
-                        <small class="text-muted" th:text="${job.jobDetails.location}">Location</small><br>
-                        <small class="text-muted" th:text="${job.jobDetails.postedDate}">Posted Date</small>
-                    </a>
-                </li>
-            </ul>
         </div>
-        <div class="bg-body-tertiary border rounded-3" id="right-panel">
-           
-        </div>
-      </div>
       <script th:inline="javascript">
         function displayJobDetails(jobId) {
             console.log(jobId);
