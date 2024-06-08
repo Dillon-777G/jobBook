@@ -1,13 +1,15 @@
-package edu.site.jobBook.job;
+package edu.site.jobBook.job.JobApplication;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import edu.site.jobBook.job.Job;
 import edu.site.jobBook.job.FileUpload.FileUploadService;
 import edu.site.jobBook.user.AppUser;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 @Service
 public class JobApplicationService {
 
+    private static final Logger logger = LoggerFactory.getLogger(FileUploadService.class);
     private final JobApplicationRepository jobApplicationRepository;
     private final FileUploadService fileUploadService;
 
@@ -24,14 +27,18 @@ public class JobApplicationService {
         this.fileUploadService = fileUploadService;
     }
 
+    // Get all job applications for a user
     public List<JobApplication> getApplicationsByUser(AppUser user) {
+        logger.info("Getting job applications for user: " + user.getUsername());
         return jobApplicationRepository.findByUser(user);
     }
 
+    // Check if a user has applied for a job
     public boolean hasUserAppliedForJob(AppUser user, Job job) {
         return jobApplicationRepository.existsByUserAndJob(user, job);
     }
 
+    // Apply for a job
     public boolean applyForJob(AppUser user, Job job, MultipartFile resume) {
         if (hasUserAppliedForJob(user, job)) {
             return false;
@@ -47,12 +54,15 @@ public class JobApplicationService {
             JobApplication jobApplication = jobApplicationRepository.save(application);
 
             fileUploadService.store(resume, jobApplication.getId());
+            logger.info("Job application submitted successfully");
             return true;
         } catch (Exception e) {
+            logger.error("Error submitting job application: " + e.getMessage());
             return false;
         }
     }
 
+    // Get job applications filtered by status
     public List<JobApplication> getFilteredApplications(AppUser username, String filter) {
         List<JobApplication> allApplications = jobApplicationRepository.findByUser(username);
 
@@ -75,10 +85,5 @@ public class JobApplicationService {
                 return allApplications;
         }
     }
-
-    public List<Object[]> countJobApplicationsByJobId() {
-        return jobApplicationRepository.countJobApplicationsByJobId();
-    }
-
 
 }

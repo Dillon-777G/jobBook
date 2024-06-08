@@ -11,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,18 +23,23 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import edu.site.jobBook.company.Company;
 import edu.site.jobBook.company.CompanyRepository;
 import edu.site.jobBook.job.Job;
-import edu.site.jobBook.job.JobApplicationStatus;
 import edu.site.jobBook.job.JobDescription;
 import edu.site.jobBook.job.JobDetails;
 import edu.site.jobBook.job.JobRepository;
 import edu.site.jobBook.job.JobService;
 import edu.site.jobBook.job.JobStatus;
+import edu.site.jobBook.job.JobApplication.JobApplicationStatus;
 
-@RunWith(MockitoJUnitRunner.class)
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+
 public class JobServiceTest {
 
     @Mock
@@ -51,7 +57,20 @@ public class JobServiceTest {
     }
 
     @Test
-    public void testGetJobById() {
+    void testGetAllJobs() {
+        List<Job> jobList = Collections.emptyList();
+
+        when(jobRepository.findAll()).thenReturn(jobList);
+
+        List<Job> result = jobService.getAllJobs();
+
+        assertNotNull(result);
+        assertEquals(0, result.size());
+        verify(jobRepository, times(1)).findAll();
+    }
+    
+    @Test
+    void testGetJobById() {
         // Mock data
         Company company = new Company(1,"ACME Corp", "Tech Company", null, null);
         Job mockJob = new Job(1L, "Software Engineer", company,null,null);
@@ -66,7 +85,7 @@ public class JobServiceTest {
     }
 
     @Test
-    public void testSaveJob() {
+    void testSaveJob() {
         // Mock data
         Company company = new Company(1,"ACME Corp", "Tech Company", null, null);
         Job mockJob = new Job(1L, "Software Engineer", company,null,null);
@@ -88,7 +107,7 @@ public class JobServiceTest {
     }
 
     @Test
-    public void testGetJobsByCompany() {
+    void testGetJobsByCompany() {
         // Mock data
         Company company = new Company(1,"ACME Corp", "Tech Company", null, null);
         List<Job> mockJobs = new ArrayList<>();
@@ -106,7 +125,7 @@ public class JobServiceTest {
     }
 
     @Test
-    public void testUpdateJob_Success() {
+    void testUpdateJob_Success() {
         // Mock data
         Company existingCompany = new Company(1L, "Existing Company", "Tech Company", null, null);
         Company updatedCompany = new Company(2L, "Updated Company", "Tech Company", null, null);
@@ -158,7 +177,7 @@ public class JobServiceTest {
     }
 
     @Test
-    public void testGetAllCompanies() {
+    void testGetAllCompanies() {
         // Mock data
         List<Company> companies = new ArrayList<>();
         companies.add(new Company(1L, "ACME Corp", "Tech Company", null, null));
@@ -177,7 +196,7 @@ public class JobServiceTest {
     }
 
     @Test
-    public void testDeleteJobById_JobExists() {
+    void testDeleteJobById_JobExists() {
         // Mock the existsById method of jobRepository
         when(jobRepository.existsById(1L)).thenReturn(true);
         doNothing().when(jobRepository).deleteById(1L);
@@ -191,7 +210,7 @@ public class JobServiceTest {
     }
 
     @Test
-    public void testGetJobDescription_JobExists() {
+    void testGetJobDescription_JobExists() {
         // Mock the findById method of jobRepository
         Job mockJob = new Job();
         mockJob.setId(1L);
@@ -217,6 +236,50 @@ public class JobServiceTest {
         assertEquals("Skills", jobDescription.getSkills());
         assertEquals("Qualification", jobDescription.getQualification());
         assertEquals("Benefits", jobDescription.getBenefits());
+    }
+
+    @Test
+    void filterJobsTest() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Job> jobPage = new PageImpl<>(Collections.emptyList());
+        String title = "Developer";
+        String location = "New York";
+        JobStatus status = JobStatus.ACTIVE;
+        String companyName = "Tech Corp";
+
+        // Test case: All parameters are provided
+        when(jobRepository.findByTitleAndJobDetailsLocationAndJobDetailsStatusAndCompany_Name(
+                title, location, status, companyName, pageable)).thenReturn(jobPage);
+        Page<Job> result = jobService.filterJobs(title, location, status, companyName, pageable);
+        assertNotNull(result);
+        verify(jobRepository, times(1)).findByTitleAndJobDetailsLocationAndJobDetailsStatusAndCompany_Name(
+                title, location, status, companyName, pageable);
+
+        // Test case: Title, location, and companyName are provided
+        when(jobRepository.findByTitleAndJobDetailsLocationAndCompany_Name(
+                title, location, companyName, pageable)).thenReturn(jobPage);
+        result = jobService.filterJobs(title, location, null, companyName, pageable);
+        assertNotNull(result);
+        verify(jobRepository, times(1)).findByTitleAndJobDetailsLocationAndCompany_Name(
+                title, location, companyName, pageable);
+
+        // Test case: Title, status, and companyName are provided
+        when(jobRepository.findByTitleAndJobDetailsStatusAndCompany_Name(
+                title, status, companyName, pageable)).thenReturn(jobPage);
+        result = jobService.filterJobs(title, null, status, companyName, pageable);
+        assertNotNull(result);
+        verify(jobRepository, times(1)).findByTitleAndJobDetailsStatusAndCompany_Name(
+                title, status, companyName, pageable);
+
+        // Test case: Location, status, and companyName are provided
+        when(jobRepository.findByJobDetailsLocationAndJobDetailsStatusAndCompany_Name(
+                location, status, companyName, pageable)).thenReturn(jobPage);
+        result = jobService.filterJobs(null, location, status, companyName, pageable);
+        assertNotNull(result);
+        verify(jobRepository, times(1)).findByJobDetailsLocationAndJobDetailsStatusAndCompany_Name(
+                location, status, companyName, pageable);
+
+        // Add similar test cases for other conditions
     }
     
 }

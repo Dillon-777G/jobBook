@@ -18,16 +18,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.site.jobBook.company.Company;
+import edu.site.jobBook.job.JobApplication.JobApplication;
+import edu.site.jobBook.job.JobApplication.JobApplicationService;
 import edu.site.jobBook.job.JobView.JobViewService;
 import edu.site.jobBook.user.AppUser;
 import edu.site.jobBook.user.UserActivity;
 import edu.site.jobBook.user.UserActivityService;
 import edu.site.jobBook.user.UserRepository;
-import groovyjarjarantlr4.v4.parse.ANTLRParser.prequelConstruct_return;
 
 // pagination imports
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;    
 import org.springframework.data.domain.Pageable;
 
 @Controller
@@ -51,6 +51,7 @@ public class JobController {
         this.jobViewService = jobViewService;
     }
 
+    // Get all jobs
     @GetMapping
     public String getAllJobs(Model model,@RequestParam(defaultValue = "0") int page) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -74,7 +75,8 @@ public class JobController {
                 .build());
         return "jobsList";
     }
-
+    
+    // Get job details for a job with the provided ID
     @GetMapping("/{id}")
     public String getJobDetails(@PathVariable("id") Long id, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -89,9 +91,11 @@ public class JobController {
         jobViewService.incrementJobViewCount(id.toString(), job.getTitle());
         long jobViewCount = jobViewService.getJobViewCount(id.toString(),job.getTitle());
         model.addAttribute("jobViewCount", jobViewCount);
+        model.addAttribute("userName", user.getUsername());
         return "jobDetails";
     }
 
+    // Get all applied jobs for the current user
     @GetMapping("/myjobs")
     public String myJobs(Model model, Principal principal) {
         // Get current user's username
@@ -107,6 +111,7 @@ public class JobController {
         return "myJobsPage";
     }
 
+    // Filter job applications by status
     @GetMapping("/myjobs/filter/{filter}")
     public String filterJobApplications(Model model, @PathVariable("filter") String filter, Principal principal) {
         AppUser user = userRepository.findByUsername(principal.getName());
@@ -116,6 +121,7 @@ public class JobController {
         return "myJobsWithFilter";
     }
 
+    // Apply for a job by submitting a resume
     @PostMapping("/apply")
     public ResponseEntity<String> applyForJob(@RequestParam("jobId") Long jobId, 
                                                 @RequestParam("resume") MultipartFile resume,
@@ -138,6 +144,7 @@ public class JobController {
         }
     }      
 
+    // Create a new job
     @GetMapping("/new")
     public String showJobForm(Model model) {
         List<Company> companies = jobService.getAllCompanies(); // Assuming you have a method to fetch all companies
@@ -150,6 +157,7 @@ public class JobController {
         return "jobCreate";
     }
 
+    // Save a new job
     @PostMapping("/save-job")
     public String saveJob(@ModelAttribute Job job,  Model model,RedirectAttributes redirectAttributes,@RequestParam("companyId") Long companyId) {
         jobService.saveJob(job, companyId);
@@ -157,6 +165,7 @@ public class JobController {
         return "redirect:/jobs";
     }
 
+    // Edit a job
     @GetMapping("/edit/{id}")
     public String showEditJobForm(@PathVariable("id") long id, Model model) {
         Job job = jobService.getJobById(id);
@@ -165,6 +174,7 @@ public class JobController {
         return "jobEdit";
     }
 
+    // Update a job
     @PostMapping("/update-job")
     public String updateJob(Job job, @RequestParam("companyId") Long companyId, Model model, RedirectAttributes redirectAttributes) {
         jobService.updateJob(job, companyId);
@@ -172,6 +182,7 @@ public class JobController {
         return "redirect:/jobs";
     }
 
+    // Get job details for a job 
     @GetMapping("/details/{jobId}")
     public String getJobFullDetails(@PathVariable Long jobId, Model model) {
         

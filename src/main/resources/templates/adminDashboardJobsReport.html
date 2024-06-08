@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layoutAdmin">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+</head>
+<body>
+    <!-- Specific content for the home page -->
+    <div layout:fragment="content">
+        <div class="container-fluid">
+            <!-- Navigation Bar -->
+            
+            <!-- Page Content -->
+            <div class="row mt-3">
+                <!-- Sidebar -->
+                <div class="col-lg-3">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action disabled">Dashboard</a>
+                        <a href="/admin/dashboard/jobs" class="list-group-item list-group-item-action">Jobs</a>
+                        <a href="#" class="list-group-item list-group-item-action disabled">Users</a>
+                        <a href="#" class="list-group-item list-group-item-action disabled">Companies</a>
+                        <a href="/admin/dashboard/jobreports" class="list-group-item list-group-item-action">Job Reports</a>
+                        <a href="/admin" class="list-group-item list-group-item-action">Settings</a>
+                    </div>
+                </div>
+                <!-- Main Content -->
+                <div class="col-lg-9">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <h2>Reporting Dashboard</h2>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Job Applications</h5>
+                                    <form th:action="@{/admin/dashboard/jobreports}" method="get" class="row g-3 align-items-center">
+                                        <div class="col-md-3">
+                                            <label for="jobTitle" class="form-label">Job Title:</label>
+                                            <input type="text" id="jobTitle" name="jobTitle" class="form-control" th:value="${jobTitle}">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="jobLocation" class="form-label">Job Location:</label>
+                                            <input type="text" id="jobLocation" name="jobLocation" class="form-control" th:value="${jobLocation}">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="jobStatus" class="form-label">Job Status:</label>
+                                            <select id="jobStatus" name="jobStatus" class="form-select">
+                                                <option value="">All</option>
+                                                <option value="ACTIVE" th:selected="${jobStatus == 'ACTIVE'}">Active</option>
+                                                <option value="EXPIRED" th:selected="${jobStatus == 'EXPIRED'}">Expired</option>
+                                                <option value="CLOSED" th:selected="${jobStatus == 'CLOSED'}">Closed</option>
+                                                <option value="ON_HOLD" th:selected="${jobStatus == 'ON_HOLD'}">On Hold</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="companyName" class="form-label">Company Name:</label>
+                                            <input type="text" id="companyName" name="companyName" class="form-control" th:value="${companyName}">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-primary">Apply Filter</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Job Applications Data</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Job Title</th>
+                                                    <th>Location</th>
+                                                    <th>Status</th>
+                                                    <th>Company Name</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Loop through the page content and populate the table rows -->
+                                                <tr th:each="job : ${jobs.content}">
+                                                    <td th:text="${job.title}">Job Title</td>
+                                                    <td th:text="${job.jobDetails.location}">Location</td>
+                                                    <td th:text="${job.jobDetails.status}">Status</td>
+                                                    <td th:text="${job.company.name}">Company Name</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- Pagination section -->
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-center">
+                                            <!-- Previous link -->
+                                            <li class="page-item" th:class="${jobs.first ? 'disabled' : ''}">
+                                                <a class="page-link" th:href="@{/admin/dashboard/jobreports(page=${jobs.number - 1})}" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                            <!-- Page numbers -->
+                                            <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, jobs.totalPages - 1)}">
+                                                <a class="page-link" th:href="@{/admin/dashboard/jobreports(page=${pageNumber})}" th:text="${pageNumber + 1}"></a>
+                                            </li>
+                                            <!-- Next link -->
+                                            <li class="page-item" th:class="${jobs.last ? 'disabled' : ''}">
+                                                <a class="page-link" th:href="@{/admin/dashboard/jobreports(page=${jobs.number + 1})}" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Notifications</h5>
+                                    <!-- Placeholder for notifications -->
+                                    <div class="alert alert-info" role="alert">
+                                        No new notifications.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var jobCountByStatus = /*[[${jobCountByStatus}]]*/ {};
+            
+            var labels = Object.keys(jobCountByStatus);
+            var data = Object.values(jobCountByStatus);
+            var backgroundColor = [
+                'rgba(54, 162, 235, 0.6)', // Blue for ACTIVE
+                'rgba(255, 99, 132, 0.6)', // Red for EXPIRED
+                'rgba(255, 206, 86, 0.6)', // Yellow for CLOSED
+                'rgba(75, 192, 192, 0.6)' // Green for ON_HOLD
+            ];
+        
+            var ctx = document.getElementById('jobPieChart').getContext('2d');
+            var jobPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColor
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Job Count by Status'
+                    }
+                }
+            });
+            /*]]>*/
+        </script>
+  </div>
+</body>
+</html>

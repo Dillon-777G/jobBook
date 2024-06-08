@@ -1,7 +1,6 @@
 package edu.site.jobBook.job.Dashboard;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -14,17 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.site.jobBook.job.Job;
-import edu.site.jobBook.job.JobApplication;
-import edu.site.jobBook.job.JobApplicationService;
 import edu.site.jobBook.job.JobService;
 import edu.site.jobBook.job.JobStatus;
 import edu.site.jobBook.job.JobView.JobView;
 import edu.site.jobBook.job.JobView.JobViewService;
-import edu.site.jobBook.post.Post;
+
 import edu.site.jobBook.post.PostService;
-import edu.site.jobBook.user.AppUser;
 import edu.site.jobBook.user.UserService;
-import groovyjarjarantlr4.v4.parse.ANTLRParser.throwsSpec_return;
 
 @Controller
 @RequestMapping("/admin/dashboard")
@@ -46,7 +41,6 @@ public class adminDashboardController {
         this.jobViewService = jobViewService;
     }
 
-
     @GetMapping("/jobs")
     public String countJobApplicationsByJobId(Model model,@RequestParam(name = "page", defaultValue = "0") int page) {
 
@@ -56,8 +50,6 @@ public class adminDashboardController {
     jobCountByStatus.put(JobStatus.CLOSED.toString(), jobService.getJobCountByStatus(JobStatus.CLOSED));
     jobCountByStatus.put(JobStatus.ON_HOLD.toString(), jobService.getJobCountByStatus(JobStatus.ON_HOLD));
     
-    List<JobView> allJobViews =  jobViewService.getAllJobViews();
-
     int pageSize = 10; // Number of jobs per page
     Pageable pageable = PageRequest.of(page, pageSize);
     Page<JobView> jobViewsPage = jobViewService.getAllJobViewsOrderByDescViewCOunt(pageable);
@@ -68,9 +60,28 @@ public class adminDashboardController {
     model.addAttribute("totalUserCount", userService.findAllUsers().size());
     
     model.addAttribute("jobCountByStatus", jobCountByStatus);
-
     model.addAttribute("jobViewsPage", jobViewsPage);
     
-        return "adminDashboard";
+        return "adminDashboardJobs";
+    }
+
+    @GetMapping("/jobreports")
+    public String getJobsPage(
+            @RequestParam(required = false) String jobTitle,
+            @RequestParam(required = false) String jobLocation,
+            @RequestParam(required = false) JobStatus jobStatus,
+            @RequestParam(required = false) String companyName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Model model) {
+
+        model.addAttribute("jobTitle", jobTitle);
+        model.addAttribute("jobLocation", jobLocation);
+        model.addAttribute("jobStatus", jobStatus);
+        model.addAttribute("companyName", companyName);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Job> jobPage = jobService.filterJobs(jobTitle, jobLocation, jobStatus,companyName, pageable);
+        model.addAttribute("jobs", jobPage);
+        return "adminDashboardJobsReport";
     }
 }

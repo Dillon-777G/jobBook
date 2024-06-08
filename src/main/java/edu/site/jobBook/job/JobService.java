@@ -15,6 +15,8 @@ import jakarta.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.apache.commons.lang3.StringUtils;
 
 @Service
 public class JobService {
@@ -182,5 +184,40 @@ public class JobService {
         return jobRepository.countByJobDetailsStatus(status);
     }
 
+    public Page<Job> filterJobs(String title, String location, JobStatus status, String companyName, Pageable pageable) {
+        if (StringUtils.isNotBlank(title) && StringUtils.isNotBlank(location) && status != null && StringUtils.isNotBlank(companyName)) {
+            return jobRepository.findByTitleAndJobDetailsLocationAndJobDetailsStatusAndCompany_Name(title, location, status, companyName, pageable);
+        } else if (StringUtils.isNotBlank(title) && StringUtils.isNotBlank(location) && StringUtils.isNotBlank(companyName)) {
+            return jobRepository.findByTitleAndJobDetailsLocationAndCompany_Name(title, location, companyName, pageable);
+        } else if (StringUtils.isNotBlank(title) && status != null && StringUtils.isNotBlank(companyName)) {
+            return jobRepository.findByTitleAndJobDetailsStatusAndCompany_Name(title, status, companyName, pageable);
+        } else if (StringUtils.isNotBlank(location) && status != null && StringUtils.isNotBlank(companyName)) {
+            return jobRepository.findByJobDetailsLocationAndJobDetailsStatusAndCompany_Name(location, status, companyName, pageable);
+        } else if (StringUtils.isNotBlank(title) && StringUtils.isNotBlank(companyName)) {
+            return jobRepository.findByTitleAndCompany_Name(title, companyName, pageable);
+        } else if (StringUtils.isNotBlank(location) && StringUtils.isNotBlank(companyName)) {
+            return jobRepository.findByJobDetailsLocationAndCompany_Name(location, companyName, pageable);
+        } else if (status != null && StringUtils.isNotBlank(companyName)) {
+            return jobRepository.findByJobDetailsStatusAndCompany_Name(status, companyName, pageable);
+        } else if (StringUtils.isNotBlank(title) && StringUtils.isNotBlank(location) && status != null) {
+            return jobRepository.findByTitleAndJobDetailsLocationAndJobDetailsStatus(title, location, status, pageable);
+        } else if (StringUtils.isNotBlank(title) && StringUtils.isNotBlank(location)) {
+            return jobRepository.findByTitleAndJobDetailsLocation(title, location, pageable);
+        } else if (StringUtils.isNotBlank(title) && status != null) {
+            return jobRepository.findByTitleAndJobDetailsStatus(title, status, pageable);
+        } else if (StringUtils.isNotBlank(location) && status != null) {
+            return jobRepository.findByJobDetailsLocationAndJobDetailsStatus(location, status, pageable);
+        } else if (StringUtils.isNotBlank(title)) {
+            return jobRepository.findByTitle(title, pageable);
+        } else if (StringUtils.isNotBlank(location)) {
+            return jobRepository.findByJobDetailsLocation(location, pageable);
+        } else if (status != null) {
+            return jobRepository.findByJobDetailsStatus(status, pageable);
+        } else {
+            return jobRepository.findAll(pageable);
+        }
+    }
+    
+    
     
 }

@@ -3,7 +3,6 @@ package edu.site.jobBook.job.FileUpload;
 import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +21,7 @@ public class FileUploadController {
     @Autowired
     private FileUploadService fileUploadService;
 
+    // Upload file to the server
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    @RequestParam("jobApplicationId") Long jobApplicationId,
@@ -31,6 +31,7 @@ public class FileUploadController {
         return "jobApplicationDetail"; // Redirect to a view to show job application details
     }
 
+    // Download file from the server
     @GetMapping("/download/{jobApplicationId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long jobApplicationId) {
         try {

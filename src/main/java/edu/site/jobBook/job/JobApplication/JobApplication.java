@@ -1,6 +1,7 @@
-package edu.site.jobBook.job;
+package edu.site.jobBook.job.JobApplication;
 
 
+import edu.site.jobBook.job.Job;
 import edu.site.jobBook.user.AppUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
