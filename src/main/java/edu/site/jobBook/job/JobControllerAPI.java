@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import edu.site.jobBook.job.JobApplication.JobApplicationService;
 import edu.site.jobBook.user.UserRepository;
 
 @RestController

@@ -1,4 +1,4 @@
-package edu.site.jobBook.job;
+package edu.site.jobBook.job.JobApplication;
 
 public enum JobApplicationStatus {
     APPLIED,
