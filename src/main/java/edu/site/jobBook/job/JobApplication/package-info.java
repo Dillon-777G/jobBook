@@ -8,7 +8,6 @@
  * <li> JobApplicationStatus: Enumeration representing the status of a job application.
  * </ul>
  * 
- * The JobApplicationService class will contain business logic related to job applications.
  * @author Ravi Dhondkar
  * @version 1.0
  */
