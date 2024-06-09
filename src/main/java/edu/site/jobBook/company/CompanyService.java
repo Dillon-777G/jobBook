@@ -13,8 +13,6 @@ import edu.site.jobBook.job.JobRepository;
 import edu.site.jobBook.post.Post;
 import edu.site.jobBook.post.PostRepository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;

@@ -4,10 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import edu.site.jobBook.company.HiringStatus.CompanyHiringStatus;
-import edu.site.jobBook.company.HiringStatus.HiringStatus;
-import edu.site.jobBook.company.HiringStatus.HiringStatusRepository;
-
 @Component
 public class JobViewInitializer implements CommandLineRunner{
     
