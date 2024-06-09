@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
 @NoArgsConstructor
@@ -24,20 +26,22 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private AppUser user;
+
     private String caption;
     private byte[] image;
     private long likes;
-    private long shares ;
-    //troubleshooting
-    // @OneToMany(mappedBy="post")
+    private long shares;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<PostComment> comments;
 
-    //Testing for handling company posts
     @ManyToOne
     @JoinColumn(name = "company_id")
+    @JsonBackReference
     private Company company;
 }

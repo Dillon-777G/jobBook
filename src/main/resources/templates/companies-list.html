@@ -57,7 +57,7 @@
         function displayCompanyDetails(companyId) {
             console.log(companyId);
             // Make an AJAX request to fetch company details
-            $.get("/company-details/" + companyId, function(data) {
+            $.get("/company-details-panel/" + companyId, function(data) {
                 $('#right-panel').html(data);
             });
         }

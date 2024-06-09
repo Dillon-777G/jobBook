@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class CompanyUIController {
 
-    
     private final UserActivityService userActivityService;
     private final CompanyService companyService;
     private final HiringStatusService hiringStatusService;
@@ -43,58 +42,17 @@ public class CompanyUIController {
         this.userActivityService = userActivityService;
     }
 
-    @GetMapping("/companies-page1")
-    public String companyPage(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser user = (AppUser) authentication.getPrincipal();
-
-        // Log user activity
-        UserActivity activity = UserActivity.builder()
-                .userId(user.getId())
-                .activity("Viewed companies page")
-                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
-        userActivityService.saveUserActivity(activity);
-
-        List<Company> companies = companyService.findAllCompanies();
-        Map<Long, String> hiringStatusMap = new HashMap<>();
-        
-        companies.forEach(company -> {
-            HiringStatus status = hiringStatusService.getHiringStatus(company.getId());
-            if (status != null) {
-                hiringStatusMap.put(company.getId(), status.name());
-            } else {
-                hiringStatusMap.put(company.getId(), "UNKNOWN");
-            }
-        });
-
-
-        // Create a map for hiring status descriptions
-        Map<String, String> hiringStatusDescriptions = new HashMap<>();
-        hiringStatusDescriptions.put("HIRING", "Hiring");
-        hiringStatusDescriptions.put("NOT_HIRING", "Not Hiring");
-        hiringStatusDescriptions.put("UNKNOWN", "Unknown");
-
-        model.addAttribute("companies", companies);
-        model.addAttribute("hiringStatusMap", hiringStatusMap);
-        model.addAttribute("hiringStatusDescriptions", hiringStatusDescriptions);
-
-        return "companies-page";
-    }
-
     @GetMapping("/companies-page")
-    public String companyPage2(Model model,@RequestParam(defaultValue = "0") int page) {
+    public String companyPage2(Model model, @RequestParam(defaultValue = "0") int page) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser user = (AppUser) authentication.getPrincipal();
-        
-        int pageSize = 5; // Number of jobs per page
+
+        int pageSize = 5; // <== Page size for pagination
         Pageable pageable = PageRequest.of(page, pageSize);
-        
-        Page<Company> companies = companyService.findAllCompaniesPage(pageable);
 
+        Page<Company> companies = companyService.findAllCompaniesPage(pageable); // <== Get paginated companies
 
-        Map<Long, String> hiringStatusMap = new HashMap<>();
-        
+        Map<Long, String> hiringStatusMap = new HashMap<>(); // <== Map to store hiring status
         companies.forEach(company -> {
             HiringStatus status = hiringStatusService.getHiringStatus(company.getId());
             if (status != null) {
@@ -104,8 +62,7 @@ public class CompanyUIController {
             }
         });
 
-        // Create a map for hiring status descriptions
-        Map<String, String> hiringStatusDescriptions = new HashMap<>();
+        Map<String, String> hiringStatusDescriptions = new HashMap<>(); // <== Descriptions for hiring statuses
         hiringStatusDescriptions.put("HIRING", "Hiring");
         hiringStatusDescriptions.put("NOT_HIRING", "Not Hiring");
         hiringStatusDescriptions.put("UNKNOWN", "Unknown");
@@ -113,7 +70,6 @@ public class CompanyUIController {
         model.addAttribute("companies", companies);
         model.addAttribute("hiringStatusMap", hiringStatusMap);
         model.addAttribute("hiringStatusDescriptions", hiringStatusDescriptions);
-
 
         userActivityService.saveUserActivity(UserActivity.builder()
             .userId(user.getId())
@@ -123,38 +79,35 @@ public class CompanyUIController {
 
         return "companies-list";
     }
-    
-    @GetMapping("/company-details/{id}")
+
+    @GetMapping("/company-details-panel/{id}")
     public String companyDetailsPane(@PathVariable Long id, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser user = (AppUser) authentication.getPrincipal();
-
 
         Optional<Company> companyOpt = companyService.findCompanyById(id);
         if (companyOpt.isPresent()) {
             Company company = companyOpt.get();
             model.addAttribute("company", company);
             model.addAttribute("jobs", companyService.findJobsByCompanyId(id));
-            
+
             userActivityService.saveUserActivity(UserActivity.builder()
                 .userId(user.getId())
                 .activity("Viewed company listing detail")
                 .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build());
-            
+
             return "company-right-panel";
         } else {
-            return "redirect:/companies";
+            return "redirect:/companies-page";
         }
     }
-
 
     @GetMapping("/company/{id}")
     public String companyDetails(@PathVariable Long id, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser user = (AppUser) authentication.getPrincipal();
 
-        // Log user activity
         UserActivity activity = UserActivity.builder()
                 .userId(user.getId())
                 .activity("Viewed company details for company ID: " + id)
@@ -164,14 +117,13 @@ public class CompanyUIController {
 
         Optional<Company> company = companyService.findCompanyById(id);
         if (company.isPresent()) {
-            HiringStatus status = hiringStatusService.getHiringStatus(id);
+            HiringStatus status = hiringStatusService.getHiringStatus(id); // <== Get hiring status for the company
             model.addAttribute("company", company.get());
-            model.addAttribute("jobs", companyService.findJobsByCompanyId(id));
-            model.addAttribute("posts", companyService.findPostsByCompanyId(id));
+            model.addAttribute("jobs", companyService.findJobsByCompanyId(id)); // <== Add jobs to the model
+            model.addAttribute("posts", companyService.findPostsByCompanyId(id)); // <== Add posts to the model
             model.addAttribute("hiringStatus", status);
 
-            // Create a map for hiring status descriptions
-            Map<String, String> hiringStatusDescriptions = new HashMap<>();
+            Map<String, String> hiringStatusDescriptions = new HashMap<>(); // <== Descriptions for hiring statuses
             hiringStatusDescriptions.put("HIRING", "Hiring");
             hiringStatusDescriptions.put("NOT_HIRING", "Not Hiring");
             hiringStatusDescriptions.put("UNKNOWN", "Unknown");
@@ -179,7 +131,7 @@ public class CompanyUIController {
 
             return "company-details";
         } else {
-            return "redirect:/companies-page";  // Redirect to the company list page if the company is not found
+            return "redirect:/companies-page";
         }
     }
 }

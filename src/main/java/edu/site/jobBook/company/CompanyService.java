@@ -27,43 +27,40 @@ public class CompanyService {
     private static final Logger logger = LoggerFactory.getLogger(CompanyService.class);
 
     @Autowired
-    private CompanyRepository companyRepository;
+    private CompanyRepository companyRepository; // <== Repository for Company entity
 
     @Autowired
-    private PostRepository postRepository;
+    private PostRepository postRepository; // <== Repository for Post entity
 
     @Autowired
-    private JobRepository jobRepository;
+    private JobRepository jobRepository; // <== Repository for Job entity
 
     @Autowired
-    private HiringStatusRepository hiringStatusRepository;
+    private HiringStatusRepository hiringStatusRepository; // <== Repository for HiringStatus entity
 
-    
-
-    public CompanyHiringStatus getHiringStatus(long companyId) {
+    public CompanyHiringStatus getHiringStatus(long companyId) { // <== Method to get hiring status
         return hiringStatusRepository.findById(companyId).orElse(new CompanyHiringStatus(companyId, HiringStatus.UNKNOWN));
     }
 
-    public List<CompanyHiringStatus> getCompaniesHiring() {
+    public List<CompanyHiringStatus> getCompaniesHiring() { // <== Method to get companies that are hiring
         return hiringStatusRepository.findByHiringStatus(HiringStatus.HIRING);
     }
 
-    public Optional<CompanyHiringStatus> findHiringStatusByCompanyId(Long companyId) {
+    public Optional<CompanyHiringStatus> findHiringStatusByCompanyId(Long companyId) { // <== Method to find hiring status by company ID
         return hiringStatusRepository.findById(companyId);
     }
 
-
-    public Company addCompany(Company company) {
+    public Company addCompany(Company company) { // <== Method to add a new company
         logger.info("Adding company: {}", company.getName());
         return companyRepository.save(company);
     }
 
-    public Optional<Company> findCompanyByName(String company) {
+    public Optional<Company> findCompanyByName(String company) { // <== Method to find company by name
         logger.info("Finding company by name: {}", company);
         return companyRepository.findBynameIgnoreCase(company);
     }
 
-    public Optional<Company> findCompanyById(Long id) {
+    public Optional<Company> findCompanyById(Long id) { // <== Method to find company by ID
         logger.info("Finding company by id: {}", id);
         Optional<Company> company = companyRepository.findById(id);
         if (company.isPresent()) {
@@ -74,7 +71,7 @@ public class CompanyService {
         return company;
     }
 
-    public void deleteCompany(Long id) {
+    public void deleteCompany(Long id) { // <== Method to delete a company
         logger.info("Deleting company with id: {}", id);
         Optional<Company> company = companyRepository.findById(id);
         if (company.isPresent()) {
@@ -96,12 +93,12 @@ public class CompanyService {
         }
     }
 
-    public List<Company> findCompaniesByPartialName(String partialName) {
+    public List<Company> findCompaniesByPartialName(String partialName) { // <== Method to find companies by partial name
         logger.info("Finding companies by partial name: {}", partialName);
         return companyRepository.findByNameContainingIgnoreCase(partialName);
     }
 
-    public Company updateCompany(long id, Company updatedCompany) {
+    public Company updateCompany(long id, Company updatedCompany) { // <== Method to update a company
         Company company = companyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Company not found with id: " + id));
 
@@ -122,7 +119,7 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
-    private void updateCompanyPosts(Company company, List<Post> updatedPosts) {
+    private void updateCompanyPosts(Company company, List<Post> updatedPosts) { // <== Method to update company's posts
         List<Post> existingPosts = company.getPosts();
 
         // Remove posts that are no longer in the updated list
@@ -146,7 +143,7 @@ public class CompanyService {
         }
     }
 
-    private void updateCompanyJobs(Company company, List<Job> updatedJobs) {
+    private void updateCompanyJobs(Company company, List<Job> updatedJobs) { // <== Method to update company's jobs
         List<Job> existingJobs = company.getJobs();
 
         // Remove jobs that are no longer in the updated list
@@ -167,7 +164,7 @@ public class CompanyService {
         }
     }
 
-    public Page<Company> findAllCompaniesPage(Pageable pageable) {
+    public Page<Company> findAllCompaniesPage(Pageable pageable) { // <== Method to find all companies with pagination
         try {
             return companyRepository.findAll(pageable);
         } catch (Exception e) {
@@ -176,18 +173,16 @@ public class CompanyService {
         }
     }
 
-
-    public List<Company> findAllCompanies() {
+    public List<Company> findAllCompanies() { // <== Method to find all companies
         logger.info("Finding all companies");
         return (List<Company>) companyRepository.findAll();
     }
 
-
-    public List<Job> findJobsByCompanyId(Long companyId) {
+    public List<Job> findJobsByCompanyId(Long companyId) { // <== Method to find jobs by company ID
         return jobRepository.findByCompanyId(companyId);
     }
 
-    public List<Post> findPostsByCompanyId(Long companyId) {
+    public List<Post> findPostsByCompanyId(Long companyId) { // <== Method to find posts by company ID
         return postRepository.findByCompanyId(companyId);
     }
 }

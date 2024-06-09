@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import lombok.ToString;
 
 import java.util.List;
 import java.util.Objects;
+
+
+
 import java.util.ArrayList;
 
 import edu.site.jobBook.job.Job;
@@ -16,6 +19,7 @@ import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 //troubleshooting
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
 @NoArgsConstructor
@@ -24,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "companies")
 @JsonIgnoreProperties({"posts", "jobs"})
+
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,11 +42,17 @@ public class Company {
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Builder.Default
+    // @JsonIgnoreProperties("company")
+    @JsonManagedReference
+    @ToString.Exclude
     private List<Post> posts = new ArrayList<>();
 
-    //waiting on other classes to be more developed
+    
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Builder.Default
+    // @JsonIgnoreProperties("company")
+    @JsonManagedReference
+    @ToString.Exclude
     private List<Job> jobs = new ArrayList<>();
 
     //https://stackoverflow.com/questions/71873676/java-override-equals-when-this-getclass-o-getclass-fails-but-shouldn
