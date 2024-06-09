@@ -26,10 +26,12 @@ public class JobRepositoryTest {
     @Autowired
     private CompanyRepository companyRepository;
 
+    //Commenting because data will be vary based on the data in the database and it may fail the test
     // @Test
     // public void findAllJobs() {
     //     List<Job> jobs = jobRepository.findAll();
-    //     assertEquals(3, jobs.size());
+    //     int totalJobsInitiated = 13; // Assuming 13 jobs are initiated
+    //     assertEquals(totalJobsInitiated, jobs.size());
     // }
 
     @Test
@@ -39,12 +41,14 @@ public class JobRepositoryTest {
         assertEquals("Software Engineer", job.getTitle());
     }
 
+    //Commenting because data will be vary based on the data in the database and it may fail the test
     // @Test
     // public void findJobsByCompany() {
     //     Company company = companyRepository.findById(1L).orElse(null);
         
     //     List<Job> jobs = jobRepository.findByCompany(company);
-    //     assertEquals(2, jobs.size());
+    //     int totalJobsByCompany = 3; // Assuming company 1 has 3 jobs
+    //     assertEquals(totalJobsByCompany, jobs.size());
     // }
 
     @Test

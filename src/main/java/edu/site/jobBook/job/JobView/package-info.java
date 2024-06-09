@@ -3,6 +3,9 @@
  * It includes classes for representing job view metadata, the service for handling
  * job view operations, and repositories for storing and retrieving job view data.
  * 
+ * <br>
+ * <b>Note:</b> Job view count is stored in a Redis database and is incremented each time a user visits a job page.
+ * 
  * <ul> 
  * <li> JobView: Entity class representing the view count of a job.
  * </ul>
@@ -19,7 +22,6 @@
  * <li> JobViewInitializer: Component class that runs on application startup to initialize job views.
  * </ul>
  * 
- * The job view count is stored in a Redis database and is incremented whenever a user visits a job.
  * @author Ravi Dhondkar
  * @version 1.0
  */
