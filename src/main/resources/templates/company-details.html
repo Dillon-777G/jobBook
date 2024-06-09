@@ -23,7 +23,9 @@
             <div th:each="job : ${jobs}" class="col-md-4 mb-4">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${job.title}">Job Title</h5>
+                        <h5 class="card-title">
+                            <a th:href="@{/jobs/{id}(id=${job.id})}" th:text="${job.title}" class="text-success">Job Title</a>
+                        </h5>
                         <p class="card-text">
                             <strong>Overview:</strong> <span th:text="${job.jobDescription.overview}">Job Overview</span><br>
                             <strong>Responsibilities:</strong> <span th:text="${job.jobDescription.responsibilities}">Job Responsibilities</span><br>
