@@ -12,8 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import edu.site.jobBook.company.HiringStatus.HiringStatus;
 import edu.site.jobBook.company.HiringStatus.HiringStatusService;
@@ -21,6 +19,14 @@ import edu.site.jobBook.company.HiringStatus.HiringStatusService;
 import edu.site.jobBook.user.AppUser;
 import edu.site.jobBook.user.UserActivity;
 import edu.site.jobBook.user.UserActivityService;
+
+// pagination imports
+import org.springframework.data.domain.Page;    
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
+
+
 
 @Controller
 public class CompanyUIController {
@@ -37,7 +43,7 @@ public class CompanyUIController {
         this.userActivityService = userActivityService;
     }
 
-    @GetMapping("/companies-page")
+    @GetMapping("/companies-page1")
     public String companyPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser user = (AppUser) authentication.getPrincipal();
@@ -62,6 +68,7 @@ public class CompanyUIController {
             }
         });
 
+
         // Create a map for hiring status descriptions
         Map<String, String> hiringStatusDescriptions = new HashMap<>();
         hiringStatusDescriptions.put("HIRING", "Hiring");
@@ -74,6 +81,73 @@ public class CompanyUIController {
 
         return "companies-page";
     }
+
+    @GetMapping("/companies-page")
+    public String companyPage2(Model model,@RequestParam(defaultValue = "0") int page) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser user = (AppUser) authentication.getPrincipal();
+        
+        int pageSize = 5; // Number of jobs per page
+        Pageable pageable = PageRequest.of(page, pageSize);
+        
+        Page<Company> companies = companyService.findAllCompaniesPage(pageable);
+
+
+        Map<Long, String> hiringStatusMap = new HashMap<>();
+        
+        companies.forEach(company -> {
+            HiringStatus status = hiringStatusService.getHiringStatus(company.getId());
+            if (status != null) {
+                hiringStatusMap.put(company.getId(), status.name());
+            } else {
+                hiringStatusMap.put(company.getId(), "UNKNOWN");
+            }
+        });
+
+        // Create a map for hiring status descriptions
+        Map<String, String> hiringStatusDescriptions = new HashMap<>();
+        hiringStatusDescriptions.put("HIRING", "Hiring");
+        hiringStatusDescriptions.put("NOT_HIRING", "Not Hiring");
+        hiringStatusDescriptions.put("UNKNOWN", "Unknown");
+
+        model.addAttribute("companies", companies);
+        model.addAttribute("hiringStatusMap", hiringStatusMap);
+        model.addAttribute("hiringStatusDescriptions", hiringStatusDescriptions);
+
+
+        userActivityService.saveUserActivity(UserActivity.builder()
+            .userId(user.getId())
+            .activity("Viewed company listing page")
+            .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+            .build());
+
+        return "companies-list";
+    }
+    
+    @GetMapping("/company-details/{id}")
+    public String companyDetailsPane(@PathVariable Long id, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser user = (AppUser) authentication.getPrincipal();
+
+
+        Optional<Company> companyOpt = companyService.findCompanyById(id);
+        if (companyOpt.isPresent()) {
+            Company company = companyOpt.get();
+            model.addAttribute("company", company);
+            model.addAttribute("jobs", companyService.findJobsByCompanyId(id));
+            
+            userActivityService.saveUserActivity(UserActivity.builder()
+                .userId(user.getId())
+                .activity("Viewed company listing detail")
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build());
+            
+            return "company-right-panel";
+        } else {
+            return "redirect:/companies";
+        }
+    }
+
 
     @GetMapping("/company/{id}")
     public String companyDetails(@PathVariable Long id, Model model) {

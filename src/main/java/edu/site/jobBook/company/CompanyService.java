@@ -1,6 +1,8 @@
 package edu.site.jobBook.company;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import edu.site.jobBook.company.HiringStatus.CompanyHiringStatus;
@@ -11,6 +13,8 @@ import edu.site.jobBook.job.JobRepository;
 import edu.site.jobBook.post.Post;
 import edu.site.jobBook.post.PostRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +38,7 @@ public class CompanyService {
     @Autowired
     private HiringStatusRepository hiringStatusRepository;
 
+    
 
     public CompanyHiringStatus getHiringStatus(long companyId) {
         return hiringStatusRepository.findById(companyId).orElse(new CompanyHiringStatus(companyId, HiringStatus.UNKNOWN));
@@ -161,6 +166,16 @@ public class CompanyService {
             }
         }
     }
+
+    public Page<Company> findAllCompaniesPage(Pageable pageable) {
+        try {
+            return companyRepository.findAll(pageable);
+        } catch (Exception e) {
+            logger.error("Error retrieving all jobs", e);
+            throw new RuntimeException("Error retrieving all jobs", e);
+        }
+    }
+
 
     public List<Company> findAllCompanies() {
         logger.info("Finding all companies");
