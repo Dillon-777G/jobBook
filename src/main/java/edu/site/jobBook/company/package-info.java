@@ -26,7 +26,8 @@
  * <li>Spring Security: For handling user authentication and authorization.</li>                            *
  * <li>Spring MVC: For handling HTTP requests and responses.</li>                                           *
  * <li>Spring Data JPA: For data access and repository management.</li>                                     *
- * <li>Redis: For caching and storing user activities and sessions.</li>                                    *
+ * <li>Redis: For managing the hiring status of a company
+ * </li>                                    *
  * </ul>
  * <br><br>
  * The application uses <b>Thymeleaf templates</b> and associated fragments for rendering views within the application.

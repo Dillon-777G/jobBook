@@ -42,7 +42,6 @@ public class Company {
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Builder.Default
-    // @JsonIgnoreProperties("company")
     @JsonManagedReference
     @ToString.Exclude
     private List<Post> posts = new ArrayList<>();
@@ -50,7 +49,6 @@ public class Company {
     
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Builder.Default
-    // @JsonIgnoreProperties("company")
     @JsonManagedReference
     @ToString.Exclude
     private List<Job> jobs = new ArrayList<>();
