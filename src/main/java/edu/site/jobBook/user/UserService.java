@@ -1,14 +1,17 @@
 package edu.site.jobBook.user;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import edu.site.jobBook.post.*;
+import edu.site.jobBook.post.Post;
+import edu.site.jobBook.post.PostRepository;
 
 @Service
 public class UserService {
@@ -41,10 +44,40 @@ public class UserService {
         return user;
     }
 
+    public Optional<AppUser> findByUsernameIgnoreCase(String username) {
+        logger.info("Finding user by username (ignore case): {}", username);
+        Optional<AppUser> user = userRepository.findByUsernameIgnoreCase(username);
+        if (user.isEmpty()) {
+            logger.warn("User not found with username (ignore case): {}", username);
+        }
+        return user;
+    }
+
     public List<AppUser> findAllUsers() {
         logger.info("Retrieving all users");
         List<AppUser> users = userRepository.findAll();
         logger.info("Found {} users", users.size());
+        return users;
+    }
+
+    public List<AppUser> findByRolesContaining(String role) {
+        logger.info("Finding users with role: {}", role);
+        List<AppUser> users = userRepository.findByRolesContaining(role);
+        logger.info("Found {} users with role: {}", users.size(), role);
+        return users;
+    }
+
+    public List<AppUser> findByUsernameContainingIgnoreCase(String username) {
+        logger.info("Finding users by username containing (ignore case): {}", username);
+        List<AppUser> users = userRepository.findByUsernameContainingIgnoreCase(username);
+        logger.info("Found {} users with username containing: {}", users.size(), username);
+        return users;
+    }
+
+    public List<AppUser> findByIdIn(List<Long> ids) {
+        logger.info("Finding users by IDs: {}", ids);
+        List<AppUser> users = userRepository.findByIdIn(ids);
+        logger.info("Found {} users with specified IDs", users.size());
         return users;
     }
 
@@ -64,8 +97,6 @@ public class UserService {
         logger.info("User created successfully with ID: {}", createdUser.getId());
         return createdUser;
     }
-
-    
 
     public void deleteUserByUsername(String username) {
         logger.info("Deleting user by username: {}", username);

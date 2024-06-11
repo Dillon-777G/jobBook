@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,6 +72,91 @@ public class UserServiceTest {
 
         assertThat(foundUser).isNotNull();
         assertThat(foundUser.getUsername()).isEqualTo("testuser");
+    }
+
+    @Test
+    public void testFindByUsernameIgnoreCase() {
+        AppUser user = AppUser.builder()
+                .username("TestUser")
+                .password(passwordEncoder.encode("password"))
+                .roles(Set.of("ROLE_USER"))
+                .build();
+
+        userRepository.save(user);
+
+        Optional<AppUser> foundUser = userService.findByUsernameIgnoreCase("testuser");
+
+        assertThat(foundUser).isPresent();
+        assertThat(foundUser.get().getUsername()).isEqualTo("TestUser");
+    }
+
+    @Test
+    public void testFindByRolesContaining() {
+        AppUser user1 = AppUser.builder()
+                .username("user1")
+                .password(passwordEncoder.encode("password1"))
+                .roles(Set.of("ROLE_USER"))
+                .build();
+
+        AppUser user2 = AppUser.builder()
+                .username("adminuser")
+                .password(passwordEncoder.encode("password2"))
+                .roles(Set.of("ROLE_ADMIN"))
+                .build();
+
+        userRepository.save(user1);
+        userRepository.save(user2);
+
+        List<AppUser> users = userService.findByRolesContaining("ROLE_ADMIN");
+
+        assertThat(users).hasSize(1);
+        assertThat(users.get(0).getUsername()).isEqualTo("adminuser");
+    }
+
+    @Test
+    public void testFindByUsernameContainingIgnoreCase() {
+        AppUser user1 = AppUser.builder()
+                .username("testuser1")
+                .password(passwordEncoder.encode("password1"))
+                .roles(Set.of("ROLE_USER"))
+                .build();
+
+        AppUser user2 = AppUser.builder()
+                .username("testUser2")
+                .password(passwordEncoder.encode("password2"))
+                .roles(Set.of("ROLE_ADMIN"))
+                .build();
+
+        userRepository.save(user1);
+        userRepository.save(user2);
+
+        List<AppUser> users = userService.findByUsernameContainingIgnoreCase("testuser");
+
+        assertThat(users).hasSize(2);
+        assertThat(users).extracting(AppUser::getUsername).containsExactlyInAnyOrder("testuser1", "testUser2");
+    }
+
+    @Test
+    public void testFindByIdIn() {
+        AppUser user1 = AppUser.builder()
+                .username("testuser1")
+                .password(passwordEncoder.encode("password1"))
+                .roles(Set.of("ROLE_USER"))
+                .build();
+
+        AppUser user2 = AppUser.builder()
+                .username("testuser2")
+                .password(passwordEncoder.encode("password2"))
+                .roles(Set.of("ROLE_ADMIN"))
+                .build();
+
+        user1 = userRepository.save(user1);
+        user2 = userRepository.save(user2);
+
+        List<AppUser> users = userService.findByIdIn(List.of(user1.getId(), user2.getId()));
+
+        assertThat(users).hasSize(2);
+        assertThat(users).extracting(AppUser::getUsername).containsExactlyInAnyOrder("testuser1", "testuser2");
     }
 
     @Test
