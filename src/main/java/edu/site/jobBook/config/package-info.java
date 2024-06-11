@@ -41,6 +41,7 @@
  * <li>Spring Data Redis: For Redis integration.</li>                            *
  * <li>Jakarta Servlet: For handling HTTP requests and responses.</li>           *
  * <li>Lombok: For reducing boilerplate code using annotations like @Data,       *
+ * <li>GitHub Actions: to allow building and verifying successfully 
  * @Builder, etc.                                                                *
  * </ul>                                                                         *
  *                                                                               *

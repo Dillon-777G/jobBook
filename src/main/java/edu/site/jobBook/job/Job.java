@@ -1,6 +1,6 @@
 package edu.site.jobBook.job;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import edu.site.jobBook.company.Company;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity // This annotation is required to specify the class as a JPA entity
 @Table(name = "JOBS")
-@JsonIgnoreProperties({"company", "jobDescription", "jobDetails"})
+@JsonIgnoreProperties({"company", "jobDescription", "jobDetails", "company_id"})
 public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +27,14 @@ public class Job {
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
-    @JsonIgnore//added to fix an overflow issue
+    @JsonBackReference
     private Company company;
 
     @OneToOne(mappedBy = "job", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("job")
     private JobDescription jobDescription;
 
     @OneToOne(mappedBy = "job", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("job")
     private JobDetails jobDetails;
 }

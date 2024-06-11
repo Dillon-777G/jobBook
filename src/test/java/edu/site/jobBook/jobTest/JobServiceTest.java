@@ -2,10 +2,10 @@ package edu.site.jobBook.jobTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.never;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,12 +17,12 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
+
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
@@ -34,7 +34,7 @@ import edu.site.jobBook.job.JobDetails;
 import edu.site.jobBook.job.JobRepository;
 import edu.site.jobBook.job.JobService;
 import edu.site.jobBook.job.JobStatus;
-import edu.site.jobBook.job.JobApplication.JobApplicationStatus;
+
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

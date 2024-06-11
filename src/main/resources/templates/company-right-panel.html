@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+    <div class="container mt-1">
+        <div class="card mb-2">
+            <div class="card-body">
+                <h5 th:text="${company.name}">Company Name</h5>
+                <a th:href="@{'/company/' + ${company.id}}">
+                    <img src="../static/resources/images/placeholder.jpg" th:src="@{/resources/images/placeholder.jpg}" class="card-img-top img-fluid" alt="Company Image">
+                </a>
+                <p th:text="${company.description}">Company Description</p>
+                <h6>Jobs:</h6>
+                <ul>
+                    <li th:each="job : ${jobs}" th:text="${job.title}">Job Title</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

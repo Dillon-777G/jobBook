@@ -11,11 +11,11 @@ import edu.site.jobBook.job.FileUpload.FileUploadService;
 import edu.site.jobBook.job.JobApplication.JobApplication;
 import edu.site.jobBook.job.JobApplication.JobApplicationRepository;
 import edu.site.jobBook.job.JobApplication.JobApplicationService;
-import edu.site.jobBook.job.JobApplication.JobApplicationStatus;
+
 import edu.site.jobBook.user.AppUser;
 
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import edu.site.jobBook.company.Company;
-import edu.site.jobBook.company.CompanyRepository;
 import edu.site.jobBook.job.Job;
 import edu.site.jobBook.job.JobRepository;
 import edu.site.jobBook.job.JobApplication.JobApplication;
@@ -34,9 +32,6 @@ public class JobApplicationRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private CompanyRepository companyRepository;
     
     @BeforeEach
     public void setUp() {
