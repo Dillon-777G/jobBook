@@ -10,7 +10,7 @@
  * <li>Implements UserDetails interface for Spring Security integration.</li>                               *
  * </ul>                                                                                                    *
  *                                                                                                          *
- * AppUserController/AppUserAPIController:                                                                                       *
+ * AppUserController/AppUserAPIController:                                                                  *
  * <ul>                                                                                                     *
  * <li>Handles user-related HTTP requests such as profile viewing, user registration, and deletion.</li>    *
  * <li>Uses UserActivityService to log user activities.</li>                                                *
@@ -42,7 +42,7 @@
  * <li>Extends JpaRepository to provide CRUD operations for AppUser entities.</li>                          *
  * </ul>                                                                                                    *
  *                                                                                                          *
- * UserService/UserSessionService:                                                                                             *
+ * UserService/UserSessionService:                                                                          *
  * <ul>                                                                                                     *
  * <li>Handles user-related business logic, such as creating and deleting users.</li>                       *
  * <li>Integrates with PostRepository to handle user-related posts.</li>                                    *
