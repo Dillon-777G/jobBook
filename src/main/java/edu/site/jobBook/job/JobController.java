@@ -92,6 +92,14 @@ public class JobController {
         long jobViewCount = jobViewService.getJobViewCount(id.toString(),job.getTitle());
         model.addAttribute("jobViewCount", jobViewCount);
         model.addAttribute("userName", user.getUsername());
+
+        // Log user activity for viewing job details
+        userActivityService.saveUserActivity(UserActivity.builder()
+                .userId(user.getId())
+                .activity("Viewed job details for job ID: " + id)
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build());
+
         return "jobDetails";
     }
 
@@ -100,6 +108,7 @@ public class JobController {
     public String myJobs(Model model, Principal principal) {
         // Get current user's username
         String username = principal.getName();
+        AppUser user = userRepository.findByUsername(username);
 
         // Get job applications for the current user
         List<JobApplication> jobApplications = jobApplicationService.getApplicationsByUser(userRepository.findByUsername(username));
@@ -107,6 +116,13 @@ public class JobController {
         // Add job applications to the model
         model.addAttribute("totalApplications", jobApplications.size());
         model.addAttribute("jobApplications", jobApplications);
+
+        // Log user activity for viewing their jobs
+        userActivityService.saveUserActivity(UserActivity.builder()
+                .userId(user.getId())
+                .activity("Viewed their job applications")
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build());
 
         return "myJobsPage";
     }
@@ -118,6 +134,13 @@ public class JobController {
         List<JobApplication> filteredApplications = jobApplicationService.getFilteredApplications(user, filter);
         model.addAttribute("jobApplications", filteredApplications);
         model.addAttribute("filterText", filter);
+
+        // Log user activity for filtering job applications
+        userActivityService.saveUserActivity(UserActivity.builder()
+                .userId(user.getId())
+                .activity("Filtered their job applications by: " + filter)
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build());
         return "myJobsWithFilter";
     }
 
@@ -138,6 +161,14 @@ public class JobController {
 
         boolean applied = jobApplicationService.applyForJob(user, job, resume);
         if (applied) {
+
+            // Log user activity for applying to a job
+            userActivityService.saveUserActivity(UserActivity.builder()
+                    .userId(user.getId())
+                    .activity("Applied for job ID: " + jobId)
+                    .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                    .build());
+
             return ResponseEntity.ok("Application submitted successfully!");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You have already applied for this job!");
@@ -193,6 +224,15 @@ public class JobController {
         model.addAttribute("job", job);
 
         jobViewService.incrementJobViewCount(jobId.toString(),job.getTitle());
+
+        // Log user activity for viewing job details
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser user = (AppUser) authentication.getPrincipal();
+        userActivityService.saveUserActivity(UserActivity.builder()
+                .userId(user.getId())
+                .activity("Viewed job full details for job ID: " + jobId)
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build());
 
         // Return the name of the Thymeleaf template to be rendered
         return "jobDetailsRightPanel";
