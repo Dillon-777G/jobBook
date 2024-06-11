@@ -81,5 +81,8 @@ This change allowed us to speed up our development marginally, gaining insight i
 5. Run the application
    ```bash
    mvn spring-boot:run
-
+6. Choose whether to login as Admin or default1/2(Admin has root privileges)
+   ```bash
+   -on login enter either username: admin & password: admin or username: default1/2 & password: password
+   ```
 
